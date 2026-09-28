@@ -4,20 +4,21 @@ import { Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
+import { WhatsAppEnquiry } from "@/components/availability/WhatsAppEnquiry";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
-/** Ivory primary on the dark espresso panel. */
-const PRIMARY_ON_DARK =
-  "!border-gold-300 !bg-ivory-50 !text-espresso-900 !shadow-[0_8px_24px_-8px_rgba(0,0,0,0.45)] hover:!bg-gold-100 hover:!shadow-[0_10px_28px_-8px_rgba(0,0,0,0.5)]";
+/** Outlined secondary on the dark espresso panel. */
+const SECONDARY_ON_DARK =
+  "!border-ivory-50/60 !text-ivory-50 !bg-transparent hover:!border-ivory-50 hover:!bg-ivory-50/10";
 
 /**
  * Closing panel shared by the home page. Same structure and motion as the
  * reference site's closing CTA, recoloured from olive green to espresso and
  * champagne gold.
  *
- * ARUBA DRAFT: the reference panel offered call / WhatsApp buttons that
- * reached the Amsterdam clinic; here the only action is an internal link to
- * the (placeholder) contact page.
+ * The one appointment action is a WhatsApp message to the confirmed Aruba
+ * number, always with the note that a message does not confirm an
+ * appointment. No tel: link: the number takes messages only.
  */
 export function CTASection({
   eyebrow,
@@ -52,11 +53,12 @@ export function CTASection({
                 {description ?? t.cta.description}
               </p>
               <div className="mt-3 flex flex-wrap items-center justify-center gap-4">
-                <Button href="/contact" variant="primary" className={PRIMARY_ON_DARK}>
-                  {t.cta.button}
+                <WhatsAppEnquiry placement="closing_cta" variant="onDark" showNote={false} />
+                <Button href="/contact#aruba-dates" variant="outline" className={SECONDARY_ON_DARK}>
+                  {t.cta.datesLink}
                 </Button>
               </div>
-              <p className="text-xs text-ivory-200/90 sm:text-sm">{t.hero.reassurance}</p>
+              <p className="max-w-md text-balance text-xs leading-relaxed text-ivory-200/90 sm:text-sm">{t.whatsapp.enquiryNote}</p>
             </div>
           </div>
         </Reveal>

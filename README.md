@@ -1,9 +1,11 @@
 # Dentacare Aruba — website (draft)
 
-> **Draft, not a live clinic website.** No Aruba clinic details have been
-> confirmed yet. The site is `noindex` everywhere and has no contact actions.
-> See [docs/ARUBA-LAUNCH-CHECKLIST.md](docs/ARUBA-LAUNCH-CHECKLIST.md) for
-> everything needed before launch.
+> **Draft, not a live clinic website.** The site is `noindex` everywhere and
+> shows only confirmed details (address, WhatsApp for messages, Instagram, the
+> dentist, treatments). See
+> [docs/ARUBA-LAUNCH-CHECKLIST.md](docs/ARUBA-LAUNCH-CHECKLIST.md) for what is
+> still needed, and [docs/ARUBA-DATES.md](docs/ARUBA-DATES.md) for the private
+> editor where the team enters the dates the dentist works in Aruba (`/admin`).
 
 Built with Next.js 15 (App Router), React 19, Tailwind CSS 4, Framer Motion and
 Lenis. Structure, responsive layout, navigation, animations and reusable
@@ -17,13 +19,16 @@ champagne gold (`#C6A664`) on ivory with dark typography.
   sources in `assets-source/`); green/sage/olive palette replaced by gold and
   espresso tokens in `src/app/globals.css`; favicons and OG image regenerated
   with `node assets-source/generate-brand-assets.mjs`.
-- **No Amsterdam facts**: address, phone, WhatsApp, email, hours, prices,
-  reviews, patient cases, team, legal text and treatment content were removed.
-  Inner pages render `DraftPage` placeholders listing the information needed.
-- **No contact actions**: no `tel:`, `mailto:`, WhatsApp, maps or Instagram
-  links; no contact form or `/api/contact` route; no floating WhatsApp button.
-- **Removed Osdorp-only features**: MondCheck, emergency-repair and treatment
-  detail pages, Dutch legal pages (terms, complaints, disclaimer).
+- **No Amsterdam practice facts**: its address, phones, email, hours, prices,
+  reviews, patient cases and legal text are not used. Treatment explanations
+  are reused without Amsterdam wording or prices. Pages still waiting on
+  content render `DraftPage` placeholders listing what is needed.
+- **Contact**: WhatsApp *message* link to the Aruba number (never `tel:`),
+  Morgenster 35C map link, Instagram. No phone, email or contact form yet.
+- **Dates in Aruba**: no fixed hours; the team enters dates in `/admin`
+  (password from environment variables, dates in Upstash Redis or a local file).
+- **Removed Osdorp-only features**: MondCheck, Dutch legal pages (terms,
+  complaints, disclaimer).
 - **English only** for now; the i18n routing is kept so languages can be added.
 - **Draft guards**: `SITE_IS_DRAFT` in `src/lib/site.ts` drives `noindex`
   metadata, an `X-Robots-Tag` header, a disallow-all `robots.txt` and an empty

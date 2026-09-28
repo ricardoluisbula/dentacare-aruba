@@ -14,12 +14,13 @@ import type { Locale } from "./routing";
  */
 export type PageMetaEntry = { title: string; description: string };
 
-/** Route -> the placeholder page whose copy describes it. */
+/**
+ * Route -> the dictionary page entry whose copy describes it. Treatment and
+ * prevention routes build their own metadata from en.treatments.ts.
+ */
 export const PAGE_KEY_BY_ROUTE: Record<string, keyof Dictionary["pages"]> = {
   "/about": "about",
   "/smile-gallery": "smileGallery",
-  "/treatments": "treatments",
-  "/prevention-hygiene": "preventionHygiene",
   "/team": "team",
   "/reviews": "reviews",
   "/contact": "contact",

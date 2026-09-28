@@ -44,21 +44,39 @@ function resolveSiteUrl(): string {
   return PRODUCTION_URL;
 }
 
+const ADDRESS = "Morgenster 35C, Aruba";
+
 /**
- * Brand-level configuration only.
+ * Confirmed clinic details, and nothing more.
  *
- * Deliberately contains NO address, phone number, WhatsApp number, email,
- * opening hours, social profiles or Google profile links: none of them have
- * been confirmed for Aruba, and the reference site's values belong to the
- * Amsterdam practice. Components that used to render them now show a
- * "to be confirmed" placeholder or nothing at all. Add each field back here,
- * with the practice's confirmed value, when it is supplied.
+ * Confirmed by the practice (2026-09-28): the address, the WhatsApp number
+ * (messages only -- it must never be rendered as a tel: link) and the
+ * Instagram profile (shared with Dentacare Osdorp).
+ *
+ * Deliberately still ABSENT until confirmed: phone number for calls, email,
+ * social profiles other than Instagram, and any opening hours. The practice
+ * has no fixed weekly hours -- the dates the dentist works in Aruba are
+ * entered in the private editor (/admin) and read from the availability
+ * store, never hard-coded here.
  */
 export const siteConfig = {
   name: "Dentacare Aruba",
   shortName: "Dentacare Aruba",
-  description: "Dentacare Aruba — draft website in preparation. Clinic details have not yet been published.",
+  description:
+    "Dentacare Aruba at Morgenster 35C, Aruba — dental care with Sam Abdin on scheduled dates. Upcoming dates and WhatsApp enquiries.",
   url: resolveSiteUrl(),
+  address: {
+    line1: "Morgenster 35C",
+    country: "Aruba",
+    full: ADDRESS,
+    // Google Maps search link for the confirmed address (no API key, opens
+    // in the visitor's Maps app on mobile).
+    mapsHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
+  },
+  // WhatsApp for MESSAGES ONLY. Never expose it as a tel: link.
+  whatsappDisplay: "+31 6 45094057",
+  whatsappUrl: "https://wa.me/31645094057",
+  instagramUrl: "https://www.instagram.com/Dentacareosdorp/",
   nav: [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },

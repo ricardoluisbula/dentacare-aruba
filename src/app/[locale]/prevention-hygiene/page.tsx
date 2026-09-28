@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
-import { getPageMeta } from "@/lib/i18n/pageMeta";
+import { TrackTreatmentView } from "@/components/treatments/TrackTreatmentView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { resolveLocale, type LocaleParams } from "@/lib/i18n/localeParams";
 import { buildPageMetadata } from "@/lib/seo";
-import { DraftPage } from "@/components/layout/DraftPage";
+import { PreventionHygienePageBody } from "./_components";
 
 const PATH = "/prevention-hygiene";
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const locale = await resolveLocale(params);
-  return buildPageMetadata({ path: PATH, locale, ...getPageMeta(PATH, locale) });
+  return buildPageMetadata({ path: PATH, locale, ...getDictionary(locale).treatmentsMeta.prevention });
 }
 
-/** ARUBA DRAFT placeholder -- see src/components/layout/DraftPage.tsx. */
 export default async function PreventionHygienePage({ params }: LocaleParams) {
   await resolveLocale(params);
-  return <DraftPage page="preventionHygiene" />;
+  return (
+    <>
+      {/* The information page for the "preventive-care" treatment. */}
+      <TrackTreatmentView slug="preventive-care" />
+      <PreventionHygienePageBody />
+    </>
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Clock, Images, MessageSquareQuote, Phone, Stethoscope, Users } from "lucide-react";
+import { ArrowUpRight, Building2, Images, MessageSquareQuote, Phone } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Container } from "@/components/ui/Container";
@@ -13,17 +13,15 @@ import type { Dictionary } from "@/lib/i18n/dictionaries/en";
 type ItemKey = keyof Dictionary["overview"]["items"];
 
 const ITEMS: { key: ItemKey; href: string; icon: LucideIcon }[] = [
-  { key: "treatments", href: "/treatments", icon: Stethoscope },
-  { key: "team", href: "/team", icon: Users },
+  { key: "about", href: "/about", icon: Building2 },
   { key: "smileGallery", href: "/smile-gallery", icon: Images },
   { key: "reviews", href: "/reviews", icon: MessageSquareQuote },
-  { key: "visit", href: "/contact", icon: Clock },
   { key: "contact", href: "/contact", icon: Phone },
 ];
 
 /**
- * ARUBA DRAFT home section: one card per area of the site that is waiting on
- * the practice's confirmed information. Uses the reference site's card
+ * ARUBA DRAFT home section: one card per area of the site that is still
+ * waiting on the practice's confirmed information. Uses the reference site's card
  * language (glass surface, rounded-3xl, accent icon badge, staggered reveal)
  * so the design can be reviewed before any real content exists. Replace with
  * the real home sections as their content is supplied.
@@ -32,11 +30,11 @@ export function DraftOverview() {
   const { t } = useTranslation();
 
   return (
-    <section id="draft-overview" className="relative scroll-mt-28 py-16 sm:py-24">
+    <section id="draft-overview" className="relative scroll-mt-28 py-12 sm:py-20">
       <Container>
         <SectionHeading eyebrow={t.overview.eyebrow} title={t.overview.title} description={t.overview.description} />
 
-        <StaggerGroup className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {ITEMS.map(({ key, href, icon: Icon }) => {
             const item = t.overview.items[key];
             return (

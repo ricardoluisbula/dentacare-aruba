@@ -14,6 +14,9 @@ import { Container } from "@/components/ui/Container";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Logo } from "@/components/layout/Logo";
 import { LanguageDropdown, LanguageList } from "@/components/layout/LanguageDropdown";
+import { InstagramIcon, WhatsAppIcon } from "@/components/ui/SocialIcons";
+import { useWhatsAppHref } from "@/components/availability/WhatsAppEnquiry";
+import { trackEvent } from "@/lib/analytics";
 import { TreatmentsDropdown, useTreatmentsMenuItems } from "@/components/layout/TreatmentsDropdown";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
@@ -40,6 +43,7 @@ export function Navbar() {
   const pathname = stripLocale(usePathname() ?? "/").path;
   const { t } = useTranslation();
   const treatmentsMenuItems = useTreatmentsMenuItems();
+  const whatsappHref = useWhatsAppHref();
   // Rendered in the top-level nav row/list on both desktop and mobile;
   // "Prevention & Hygiene" is deliberately excluded here and only reachable
   // through the "Treatments" dropdown/accordion below. `siteConfig.nav`
@@ -378,6 +382,19 @@ export function Navbar() {
                 // showed through behind the menu items.
                 className="glass-strong flex max-h-[calc(100dvh-6.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] flex-col gap-1 overflow-y-auto overscroll-contain rounded-3xl !bg-bg-elevated p-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.35)]"
               >
+                {/* First in the mobile menu: the appointment enquiry. A WhatsApp
+                    MESSAGE link to the confirmed Aruba number -- never tel:. */}
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("click_whatsapp", { placement: "mobile_menu" })}
+                  className="mb-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-4 py-3.5 text-base font-semibold text-accent-contrast shadow-[0_8px_30px_-8px_var(--accent)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <WhatsAppIcon className="h-5 w-5" aria-hidden="true" />
+                  {t.whatsapp.short}
+                  <span className="sr-only"> {t.a11y.opensInNewTab}</span>
+                </a>
                 {navItems.map((item) => {
                   const active =
                     item.href === "/treatments"
@@ -448,6 +465,17 @@ export function Navbar() {
                   );
                 })}
                 <LanguageList className="mt-3 border-t border-surface-border px-2 pt-4" />
+                <div className="mt-2 flex items-center border-t border-surface-border px-2 pb-1 pt-3">
+                  <a
+                    href={siteConfig.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t.header.instagramLabel}
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-surface-border text-fg-muted transition-colors duration-200 hover:!border-accent/50 hover:text-accent-deep dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <InstagramIcon className="h-5 w-5" />
+                  </a>
+                </div>
               </div>
             </Container>
           </motion.div>

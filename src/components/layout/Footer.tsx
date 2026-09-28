@@ -1,13 +1,15 @@
 "use client";
 
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
-import { ANALYTICS_CONFIGURED, openCookieSettings } from "@/lib/analytics";
-import { MapPin, Mail, Phone, Clock } from "lucide-react";
+import { ANALYTICS_CONFIGURED, openCookieSettings, trackEvent } from "@/lib/analytics";
+import { CalendarDays, MapPin, Mail, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import { navLabel } from "@/lib/navKeys";
 import { NEW_PATIENTS_PATH } from "@/lib/redirects";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/layout/Logo";
+import { InstagramIcon, WhatsAppIcon } from "@/components/ui/SocialIcons";
+import { useWhatsAppHref } from "@/components/availability/WhatsAppEnquiry";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
 const LINK_CLASS =
@@ -15,17 +17,16 @@ const LINK_CLASS =
 
 export function Footer() {
   const { t } = useTranslation();
+  const whatsappHref = useWhatsAppHref();
+  const iconClass = "mt-0.5 h-4 w-4 shrink-0 text-accent";
 
-  // ARUBA DRAFT: the "Visit" column keeps the reference site's layout, but
-  // every value is a plain-text "to be confirmed" placeholder -- no link, no
-  // tel:/mailto:, no map -- so nothing here can reach the Amsterdam clinic.
-  // Replace each with the practice's confirmed detail (from siteConfig) once
-  // supplied; see docs/ARUBA-LAUNCH-CHECKLIST.md.
-  const visitRows = [
-    { icon: MapPin, label: t.footer.addressLabel },
+  // Confirmed details only (address, WhatsApp, Instagram). Phone and email
+  // stay plain-text "to be confirmed" -- never a tel:/mailto: link -- until
+  // the practice supplies them. There are no fixed opening hours: the column
+  // links to the dates the dentist is in Aruba instead.
+  const pendingRows = [
     { icon: Phone, label: t.footer.phoneLabel },
     { icon: Mail, label: t.footer.emailLabel },
-    { icon: Clock, label: t.footer.hoursLabel },
   ];
 
   return (
@@ -36,6 +37,15 @@ export function Footer() {
             <Logo className="h-10 w-auto" />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-fg-muted">{t.footer.description}</p>
+          <a
+            href={siteConfig.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.header.instagramLabel}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-surface-border text-fg-muted transition-colors duration-200 hover:border-accent/50 hover:text-accent-deep dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <InstagramIcon className="h-[18px] w-[18px]" />
+          </a>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -59,9 +69,50 @@ export function Footer() {
         <div className="flex flex-col gap-4">
           <h3 className="font-display text-sm uppercase tracking-[0.2em] text-fg">{t.footer.visitHeading}</h3>
           <ul className="flex flex-col gap-3.5 text-sm text-fg-muted">
-            {visitRows.map(({ icon: Icon, label }) => (
+            <li className="flex items-start gap-3">
+              <MapPin className={iconClass} strokeWidth={1.75} aria-hidden="true" />
+              <span>
+                <span className="block text-fg">{t.footer.addressLabel}</span>
+                <a
+                  href={siteConfig.address.mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("click_maps", { placement: "footer" })}
+                  className={LINK_CLASS}
+                >
+                  <address className="inline not-italic">{siteConfig.address.full}</address>
+                  <span className="sr-only"> {t.a11y.opensInNewTab}</span>
+                </a>
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <WhatsAppIcon className={iconClass} aria-hidden="true" />
+              <span>
+                <span className="block text-fg">{t.footer.whatsappLabel}</span>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("click_whatsapp", { placement: "footer" })}
+                  className={LINK_CLASS}
+                >
+                  {siteConfig.whatsappDisplay}
+                  <span className="sr-only"> {t.a11y.opensInNewTab}</span>
+                </a>
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CalendarDays className={iconClass} strokeWidth={1.75} aria-hidden="true" />
+              <span>
+                <span className="block text-fg">{t.footer.datesLabel}</span>
+                <Link href="/contact#aruba-dates" className={LINK_CLASS}>
+                  {t.footer.datesLink}
+                </Link>
+              </span>
+            </li>
+            {pendingRows.map(({ icon: Icon, label }) => (
               <li key={label} className="flex items-start gap-3">
-                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={1.75} aria-hidden="true" />
+                <Icon className={iconClass} strokeWidth={1.75} aria-hidden="true" />
                 <span>
                   <span className="block text-fg">{label}</span>
                   <span className="block italic">{t.draft.pending}</span>

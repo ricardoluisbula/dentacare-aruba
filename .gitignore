@@ -47,3 +47,6 @@ next-env.d.ts
 .vercel
 .env*
 !.env.example
+
+# Local-only store for the Aruba dates editor (see src/lib/availability/store.ts)
+/.data/

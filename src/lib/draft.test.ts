@@ -6,13 +6,32 @@ import en from "@/lib/i18n/dictionaries/en";
 import { buildPageMetadata } from "@/lib/seo";
 
 /**
- * The Aruba site is a draft: it must stay out of search engines, and it must
- * never present the Amsterdam (Osdorp) practice's details as its own. These
- * fail the moment either promise is broken; e2e/draft.spec.ts checks the same
+ * The Aruba site is a draft: it must stay out of search engines, show only
+ * details the practice has confirmed, and never present the Amsterdam
+ * (Osdorp) practice's details as its own. e2e/draft.spec.ts checks the same
  * against the served pages.
  */
 
-const FORBIDDEN = [/osdorp/i, /amsterdam/i, /calandlaan/i, /619\s?9397/, /45495419/, /hotmail/i, /since 2009/i, /mondcheck/i, /€/];
+/**
+ * Confirmed exceptions that legitimately contain otherwise-forbidden words:
+ * the shared Instagram profile (its handle contains "osdorp") and the
+ * dentist's own verified experience in Amsterdam.
+ */
+const ALLOWED = [siteConfig.instagramUrl, "@dentacareosdorp", ...en.teamPage.bio, en.teamPage.experienceValue];
+
+const FORBIDDEN = [
+  /osdorp/i,
+  /amsterdam/i,
+  /calandlaan/i,
+  /619\s?9397/,
+  /45495419/, // the Amsterdam practice's WhatsApp number
+  /hotmail/i,
+  /since 2009/i,
+  /mondcheck/i,
+  /€/,
+  /tel:/i,
+  /mailto:/i,
+];
 
 describe("Aruba draft", () => {
   it("is still flagged as a draft", () => {
@@ -29,16 +48,28 @@ describe("Aruba draft", () => {
     expect(sitemap()).toEqual([]);
   });
 
-  it("carries no contact details in the site config", () => {
-    for (const key of ["address", "email", "hours", "socials", "whatsappUrl", "clinicLandlineTel"]) {
+  it("uses exactly the confirmed contact details", () => {
+    expect(siteConfig.address.full).toBe("Morgenster 35C, Aruba");
+    expect(siteConfig.whatsappUrl).toBe("https://wa.me/31645094057");
+    expect(siteConfig.instagramUrl).toBe("https://www.instagram.com/Dentacareosdorp/");
+  });
+
+  it("has no unconfirmed phone, email or opening hours", () => {
+    for (const key of ["phone", "email", "hours", "clinicLandlineTel", "socials"]) {
       expect(siteConfig, key).not.toHaveProperty(key);
     }
   });
 
-  it("has no Amsterdam details anywhere in the dictionary or site config", () => {
-    const text = JSON.stringify({ en, siteConfig });
+  it("has no Amsterdam practice details or contact links outside the confirmed exceptions", () => {
+    let text = JSON.stringify({ en, siteConfig });
+    for (const allowed of ALLOWED) text = text.split(allowed).join("");
     for (const pattern of FORBIDDEN) {
       expect(text, String(pattern)).not.toMatch(pattern);
     }
+  });
+
+  it("never states that a WhatsApp message confirms an appointment", () => {
+    expect(en.whatsapp.enquiryNote).toMatch(/not a booking/);
+    expect(JSON.stringify(en)).not.toMatch(/book (now|online)|appointment (is )?confirmed by/i);
   });
 });

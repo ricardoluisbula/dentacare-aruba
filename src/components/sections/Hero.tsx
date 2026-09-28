@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarClock, ImageIcon } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { WhatsAppEnquiry } from "@/components/availability/WhatsAppEnquiry";
 import { Reveal } from "@/components/animations/Reveal";
 import { useDepthParallax } from "@/lib/hooks/useDepthParallax";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
@@ -73,20 +74,11 @@ export function Hero() {
             duration={0.6}
             className="mt-7 flex flex-wrap items-center justify-center gap-5 lg:justify-start"
           >
-            {/* ARUBA DRAFT: the reference site's primary action was a tel:
-                link to the Amsterdam landline. It stays in the layout as a
-                visibly disabled control until the Aruba booking route
-                (phone, WhatsApp or form) is confirmed. */}
-            <button
-              type="button"
-              disabled
-              className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full border border-dashed border-accent bg-accent/15 px-8 py-4 text-sm font-semibold tracking-wide text-accent-deep dark:text-accent"
-            >
-              <CalendarClock className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-              {t.hero.ctaPending}
-            </button>
-            <Button href="#draft-overview" variant="outline">
-              {t.hero.ctaOverview}
+            {/* Appointment enquiries go by WhatsApp message (confirmed Aruba
+                number). Never a tel: link -- the number takes messages only. */}
+            <WhatsAppEnquiry placement="hero" showNote={false} />
+            <Button href="#aruba-dates" variant="outline">
+              {t.hero.ctaDates}
             </Button>
           </Reveal>
 
@@ -95,9 +87,9 @@ export function Hero() {
             delay={HERO_STAGGER * 5}
             distance={HERO_DISTANCE}
             duration={0.55}
-            className="mt-3 text-xs text-fg-muted sm:text-sm"
+            className="mt-4 max-w-md text-balance text-xs leading-relaxed text-fg-muted sm:text-sm"
           >
-            {t.hero.reassurance}
+            {t.whatsapp.enquiryNote}
           </Reveal>
         </div>
 

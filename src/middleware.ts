@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { DEFAULT_LOCALE, LOCALE_COOKIE, LOCALIZED_ROUTES, isLocale } from "@/lib/i18n/routing";
 import { LOCALE_HEADER } from "@/lib/i18n/localeHeader";
+import { TREATMENT_PAGE_SLUGS } from "@/lib/treatmentSlugs";
 
 /** Permanent redirect. 308 preserves the request method and body (unlike 301/302). */
 const PERMANENT = 308;
@@ -41,6 +42,20 @@ export function middleware(request: NextRequest) {
     return withStaleCookieCleared(request, NextResponse.redirect(new URL(`${rest}${search}`, request.url), PERMANENT));
   }
 
+  // --- 3b. Unknown treatment pages ------------------------------------------
+  // "/treatments/<anything>" matches the dynamic treatment route; for a
+  // rewritten URL Next.js would render the framework's bare error page for an
+  // unknown slug. Send it to a path no page claims instead, which Next answers
+  // with the site's own 404 (src/app/global-not-found.tsx).
+  const locale = isLocale(firstSegment) ? firstSegment : DEFAULT_LOCALE;
+  const route = isLocale(firstSegment) ? pathname.slice(firstSegment.length + 1) || "/" : pathname;
+  if (isUnknownTreatment(route)) {
+    return withStaleCookieCleared(
+      request,
+      NextResponse.rewrite(new URL(`/${locale}/__not-found`, request.url), withLocale(request, locale))
+    );
+  }
+
   // --- 4. Map unprefixed paths onto the default-language route tree -------
   // A rewrite, not a redirect: the visitor's URL stays "/about" while Next
   // renders `app/[locale]/about` with the default locale. Anything that
@@ -56,6 +71,15 @@ export function middleware(request: NextRequest) {
   }
 
   return withStaleCookieCleared(request, NextResponse.next(withLocale(request, firstSegment)));
+}
+
+const TREATMENT_ROUTE = /^\/treatments\/([^/]+)\/?$/;
+const KNOWN_TREATMENTS = new Set<string>(TREATMENT_PAGE_SLUGS);
+
+/** "/treatments/<slug>" for a slug that has no page. */
+function isUnknownTreatment(route: string): boolean {
+  const match = route.match(TREATMENT_ROUTE);
+  return Boolean(match && !KNOWN_TREATMENTS.has(match[1]));
 }
 
 /**
@@ -91,9 +115,9 @@ function translatedRewrite(pathname: string): string | null {
 
 export const config = {
   /**
-   * Everything except Next.js internals, API routes, the generated SEO files
-   * and static assets served from /public, none of which need locale
-   * rewriting.
+   * Everything except Next.js internals, API routes, the private /admin
+   * editor (its own root layout, no language routing), the generated SEO
+   * files and static assets served from /public.
    */
-  matcher: ["/((?!_next/static|_next/image|api/|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|txt|xml|webmanifest|js|mjs|css|map|woff|woff2)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|api/|admin(?:/|$)|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|txt|xml|webmanifest|js|mjs|css|map|woff|woff2)$).*)"],
 };
