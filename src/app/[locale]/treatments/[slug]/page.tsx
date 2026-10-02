@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { TrackTreatmentView } from "@/components/treatments/TrackTreatmentView";
 import { genericTreatmentSlugs, treatmentPages } from "@/data/treatmentPages";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getTreatmentPageContent } from "@/content/pages";
 import { isLocale, locales } from "@/lib/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo";
 import { TreatmentDetailBody } from "./_components";
@@ -37,12 +38,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default async function TreatmentDetailPage({ params }: Params) {
-  const { slug } = await resolveParams(params);
+  const { locale, slug } = await resolveParams(params);
 
   return (
     <>
       <TrackTreatmentView slug={slug} />
-      <TreatmentDetailBody slug={slug} />
+      {/* Long page text is picked here, on the server, for this language only. */}
+      <TreatmentDetailBody slug={slug} content={getTreatmentPageContent(slug, locale)} />
     </>
   );
 }

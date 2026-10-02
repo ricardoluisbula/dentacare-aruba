@@ -4,7 +4,7 @@ import { ArrowUpRight, ShieldCheck } from "lucide-react";
 import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
 import { NightGuardIcon } from "@/components/treatments/TreatmentIcons";
-import { getTreatment } from "@/data/treatments";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { TEETH_GRINDING_PATH, treatmentDetailPath } from "@/lib/treatmentLinks";
@@ -34,6 +34,7 @@ export function NightGuardSpotlight({
   showDefinitionLink?: boolean;
 }) {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
   const item = getTreatment(SLUG);
   const copy = t.nightGuardSpotlight;
 

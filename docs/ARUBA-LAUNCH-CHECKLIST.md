@@ -78,6 +78,8 @@ their content is in.
 
 ## 4. Practice sign-off
 
+- [ ] **Translation review**: the Dutch, Spanish and Papiamento texts are machine-assisted and **not professionally verified**. Each needs review by a fluent speaker -- for Papiamento, a fluent **Aruba** speaker -- with priority on clinical and policy wording: [docs/translations/REVIEW-nl.md](translations/REVIEW-nl.md), [REVIEW-es.md](translations/REVIEW-es.md), [REVIEW-pap.md](translations/REVIEW-pap.md). Papiamento day and month names for the dates are set in `src/lib/availability/dates.ts` and also need confirming.
+
 - [ ] Clinical wording marked `ARUBA DRAFT` in the code, especially the emergency safety note, the rewritten emergency FAQs and the gallery wording
 - [ ] Our Team: the title to use ("Sam Abdin, Dentist" — not "Dr."), any further verified credentials, a biography, other team members
 - [ ] Approve the gold wordmark and icon (`assets-source/`), or supply an official logo
@@ -85,7 +87,7 @@ their content is in.
 ## 5. Decisions
 
 - [ ] **Domain**: choose a custom domain (the code uses the placeholder `dentacare-aruba.invalid` outside Vercel)
-- [ ] **Languages**: the site is English only. Which languages should it offer?
+- [x] **Languages**: English (default, unprefixed URLs), Dutch (`/nl`), Spanish (`/es`) and Aruba Papiamento (`/pap`), with a language selector on every page
 - [x] **Analytics**: disabled for now
 
 ## 6. Optional improvements

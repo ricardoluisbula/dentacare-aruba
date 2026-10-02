@@ -8,7 +8,7 @@ import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { useDepthParallax } from "@/lib/hooks/useDepthParallax";
-import { beforeAfterCases } from "@/data/beforeAfterCases";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
 /**
@@ -26,6 +26,7 @@ import { useTranslation } from "@/lib/i18n/LanguageProvider";
  */
 export function SignatureTransformation() {
   const { t } = useTranslation();
+  const { cases: beforeAfterCases } = useLocalizedContent();
   const featuredCase = beforeAfterCases.find((item) => item.id === "case-10") ?? beforeAfterCases[0];
   const { ref: sliderRef, y: depthY } = useDepthParallax([-6, 6]);
 

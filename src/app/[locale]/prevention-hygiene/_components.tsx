@@ -27,6 +27,7 @@ import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { CTASection } from "@/components/sections/CTASection";
 import { ProtectSmileIllustration } from "@/components/illustrations/PreventionIllustrations";
 import { PREVENTION_RELATED_SLUGS, preventionExtras, preventionFaq } from "@/data/preventionContent";
+import type { TreatmentPageContent } from "@/data/treatmentPages/types";
 import { treatmentDetailPath } from "@/lib/treatmentLinks";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
@@ -208,9 +209,9 @@ function VisitAndProtectSection() {
  * What prevention cannot do, what to do at home, and where to read about
  * treatment when something does need repairing (src/data/preventionContent.ts).
  */
-function ExpectationsSection() {
+function ExpectationsSection({ preventiveCare }: { preventiveCare: TreatmentPageContent }) {
   const { t } = useTranslation();
-  const extras = preventionExtras();
+  const extras = preventionExtras(preventiveCare);
 
   return (
     <section className="pb-12 sm:pb-20 lg:pb-28">
@@ -267,7 +268,7 @@ function ExpectationsSection() {
   );
 }
 
-function PreventionFAQSection() {
+function PreventionFAQSection({ preventiveCare }: { preventiveCare: TreatmentPageContent }) {
   const { t } = useTranslation();
   const copy = t.preventionHygienePage;
   return (
@@ -275,14 +276,15 @@ function PreventionFAQSection() {
       <Container className="flex flex-col items-center gap-14">
         <SectionHeading eyebrow={copy.faqEyebrow} title={copy.faqTitle} />
         <PageReveal delay={0.1} className="w-full max-w-2xl">
-          <FAQAccordion items={preventionFaq(copy.faqItems)} />
+          <FAQAccordion items={preventionFaq(copy.faqItems, preventiveCare)} />
         </PageReveal>
       </Container>
     </section>
   );
 }
 
-export function PreventionHygienePageBody() {
+/** `preventiveCare` is the page text in the visitor's language, picked on the server. */
+export function PreventionHygienePageBody({ preventiveCare }: { preventiveCare: TreatmentPageContent }) {
   const { t } = useTranslation();
   return (
     <>
@@ -290,8 +292,8 @@ export function PreventionHygienePageBody() {
       <WhyPreventionSection />
       <ServicesSection />
       <VisitAndProtectSection />
-      <ExpectationsSection />
-      <PreventionFAQSection />
+      <ExpectationsSection preventiveCare={preventiveCare} />
+      <PreventionFAQSection preventiveCare={preventiveCare} />
       <CTASection title={t.preventionHygienePage.contactTitle} description={t.preventionHygienePage.contactDescription} />
     </>
   );

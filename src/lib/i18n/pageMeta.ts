@@ -34,7 +34,8 @@ export function getPageMeta(path: string, locale: Locale): PageMetaEntry {
   const t = getDictionary(locale);
 
   if (path === "/") {
-    return { title: siteConfig.name, description: siteConfig.description };
+    // The footer description is the site summary, translated with everything else.
+    return { title: siteConfig.name, description: t.footer.description };
   }
 
   if (path === "/smile-gallery") {

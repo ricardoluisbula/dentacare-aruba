@@ -340,6 +340,10 @@ export function Navbar() {
             </div>
 
             <div className="flex shrink-0 items-center gap-2 min-[1440px]:hidden">
+              {/* Below 1440px the menu collapses, but tablets and laptops keep
+                  the language selector visible in the bar. Phones have no
+                  room beside the logo; it is the first group in their menu. */}
+              <LanguageDropdown className="hidden sm:block" />
               <ThemeToggle className="shrink-0" />
               <button
                 ref={menuButtonRef}
@@ -395,6 +399,9 @@ export function Navbar() {
                   {t.whatsapp.short}
                   <span className="sr-only"> {t.a11y.opensInNewTab}</span>
                 </a>
+                {/* Language choice near the top of the menu, so it is seen
+                    without scrolling on a phone. */}
+                <LanguageList className="mb-2 border-b border-surface-border px-2 pb-4 pt-1" />
                 {navItems.map((item) => {
                   const active =
                     item.href === "/treatments"
@@ -464,7 +471,6 @@ export function Navbar() {
                     </Link>
                   );
                 })}
-                <LanguageList className="mt-3 border-t border-surface-border px-2 pt-4" />
                 <div className="mt-2 flex items-center border-t border-surface-border px-2 pb-1 pt-3">
                   <a
                     href={siteConfig.instagramUrl}

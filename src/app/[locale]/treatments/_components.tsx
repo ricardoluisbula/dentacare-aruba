@@ -12,12 +12,11 @@ import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { CATEGORY_FILTER_KEY } from "@/components/gallery/categoryMeta";
-import { beforeAfterCases } from "@/data/beforeAfterCases";
 import { useDepthParallax } from "@/lib/hooks/useDepthParallax";
 import { CTASection } from "@/components/sections/CTASection";
 import { NightGuardSpotlight } from "@/components/sections/NightGuardSpotlight";
 import { treatmentIcons } from "@/components/treatments/TreatmentIcons";
-import { getTreatment } from "@/data/treatments";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { FEATURED_SLUGS, REMAINING_SLUGS, treatmentDetailPath, type TreatmentSlug } from "@/lib/treatmentLinks";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
@@ -66,6 +65,7 @@ const GALLERY_CARD_ASPECT = "16 / 9";
 
 function TreatmentsHero() {
   const { t } = useTranslation();
+  const { cases: beforeAfterCases } = useLocalizedContent();
   const copy = t.treatmentsPage;
   const heroCase = beforeAfterCases.find((c) => c.id === HERO_CASE_ID)!;
   const { ref: mediaRef, y: depthY } = useDepthParallax();
@@ -214,6 +214,7 @@ function TrustStrip() {
 
 function FeaturedTreatments() {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
   const q = t.treatmentsPage.quickFacts;
   const facts: Record<(typeof FEATURED_SLUGS)[number], [string, string]> = {
     "composite-restorations": [q.personalizedAssessment, q.naturalAppearance],
@@ -316,6 +317,7 @@ function FeaturedTreatments() {
 
 function RemainingTreatments() {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
   const [openSlug, setOpenSlug] = useState<TreatmentSlug | null>(null);
 
   return (
@@ -457,6 +459,7 @@ const COMPARISON_MATRIX: Record<(typeof COMPARISON_ROW_KEYS)[number], Record<Com
 
 function ComparisonSection() {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
   const c = t.treatmentsPage.comparison;
 
   return (
@@ -541,6 +544,7 @@ function ComparisonSection() {
 
 function TransformationGallery() {
   const { t } = useTranslation();
+  const { cases: beforeAfterCases } = useLocalizedContent();
   const cases = GALLERY_CASE_IDS.map((id) => beforeAfterCases.find((c) => c.id === id)!);
 
   return (

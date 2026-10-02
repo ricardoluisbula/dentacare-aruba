@@ -374,3 +374,4 @@ const treatmentsCopy = {
 };
 
 export default treatmentsCopy;
+export type TreatmentsCopy = typeof treatmentsCopy;

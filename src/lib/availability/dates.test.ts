@@ -6,6 +6,8 @@ import {
   todayInAruba,
   upcomingEntries,
   validateEntry,
+  PAP_MONTHS,
+  PAP_WEEKDAYS,
   type AvailabilityEntry,
 } from "./dates";
 
@@ -99,5 +101,18 @@ describe("display", () => {
   it("shows hours only when both were entered", () => {
     expect(formatTimeRange(entry("a", "2026-10-12", "2026-10-12", "09:00", "17:00"))).toBe("09:00 – 17:00");
     expect(formatTimeRange(entry("b", "2026-10-12"))).toBeNull();
+  });
+});
+
+describe("display in other languages", () => {
+  it("names days and months in the page's language, keeping the Aruba date", () => {
+    expect(formatDateRange("2026-10-12", "2026-10-16", "nl")).toBe("ma 12 – vr 16 okt 2026");
+    expect(formatDateRange("2026-10-12", "2026-10-16", "es")).toBe("lun 12 – vie 16 oct 2026");
+    // Papiamento names come from the tables in dates.ts, so a reviewer's
+    // spelling or accent correction there never breaks this test.
+    const [mon, fri] = [PAP_WEEKDAYS[1], PAP_WEEKDAYS[5]];
+    expect(formatDateRange("2026-10-12", "2026-10-16", "pap")).toBe(`${mon} 12 – ${fri} 16 ${PAP_MONTHS[9]} 2026`);
+    expect(formatDateRange("2026-12-28", "2027-01-01", "pap")).toBe(`${mon} 28 ${PAP_MONTHS[11]} 2026 – ${fri} 1 ${PAP_MONTHS[0]} 2027`);
+    expect(formatDateRange("2026-10-18", "2026-10-18", "nl")).toBe("zo 18 okt 2026");
   });
 });

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/animations/Reveal";
 import { beforeAfterCases, type BeforeAfterCase, type TreatmentCategory } from "@/data/beforeAfterCases";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { GalleryFilters, type GalleryFilterValue } from "@/components/gallery/GalleryFilters";
 import { CATEGORY_ICON, CATEGORY_FILTER_KEY, ALL_RESULTS_ICON, type CategoryIconComponent } from "@/components/gallery/categoryMeta";
@@ -114,11 +115,15 @@ function CategorySectionHeading({ index, label }: { index: number; label: string
   );
 }
 
-const gridCases = beforeAfterCases.filter((item) => !item.featured);
-const availableCategories = FILTER_ORDER.filter((category) => gridCases.some((item) => item.treatmentCategories.includes(category)));
+/** Which categories have cases depends only on the photos, not on the language. */
+const availableCategories = FILTER_ORDER.filter((category) =>
+  beforeAfterCases.some((item) => !item.featured && item.treatmentCategories.includes(category))
+);
 
 export function GalleryGrid() {
   const { t } = useTranslation();
+  const { cases } = useLocalizedContent();
+  const gridCases = useMemo(() => cases.filter((item) => !item.featured), [cases]);
   const [activeFilter, setActiveFilter] = useState<GalleryFilterValue>("all");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -151,7 +156,7 @@ export function GalleryGrid() {
     if (activeFilter === "all") return groupByCategory(gridCases);
     const items = gridCases.filter((item) => item.treatmentCategories.includes(activeFilter as TreatmentCategory));
     return items.length > 0 ? [{ category: activeFilter as TreatmentCategory, items }] : [];
-  }, [activeFilter]);
+  }, [activeFilter, gridCases]);
 
   const showHeadings = activeFilter === "all" && groups.length > 1;
 
