@@ -47,7 +47,7 @@ disallow, empty sitemap) until `SITE_IS_DRAFT` in `src/lib/site.ts` is set to
 - [ ] Approve reusing the Osdorp portrait of Sam Abdin (now on the home page and Our Team), or supply another
 - [ ] Confirm patient consent covers this second website for every reused before-and-after case (Smile Gallery, home page, treatments hub, emergency page)
 - [ ] Approve reusing the professional-cleaning photo (prevention page and treatments hub)
-- [ ] Composite restorations card on the treatments hub has no photo (the reference used a Porcelain Veneers result, case-10, which would misrepresent composite work); supply a composite result if wanted
+- [ ] Composite Veneers card on the treatments hub has no photo (the reference used a Porcelain Veneers result, case-10, which would misrepresent composite work); supply a composite veneers result if wanted
 - [ ] Dental implants card on the treatments hub has no photo (the reference used a photo of the Amsterdam premises' instruments); supply one if wanted
 - [ ] Approval of the gold wordmark and icon (`assets-source/`), or an official Aruba logo file
 

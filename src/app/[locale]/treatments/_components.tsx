@@ -44,8 +44,8 @@ const LIST_ANCHOR = "our-treatments";
  * a plain gold panel instead:
  * - implants: the reference used a photo of its own premises' instruments,
  *   which is not used on this site, and no gallery case is an implant result;
- * - composite restorations: the reference used case-10, a porcelain veneers
- *   result, which would misrepresent what composite work achieves.
+ * - composite veneers: the reference used case-10, a porcelain veneers
+ *   result, which would misrepresent what composite veneers achieve.
  */
 const FEATURED_IMAGES: Partial<Record<(typeof FEATURED_SLUGS)[number], { src: string; fit: "cover" | "contain" }>> = {
   "emergency-aesthetic-dentistry": { src: "/images/home/emergency-care-after.webp", fit: "cover" },

@@ -82,12 +82,16 @@ export const treatments: Treatment[] = [
     icon: "implant",
   },
   {
+    // Display name changed 2026-10-02 from "Composite Restorations" to
+    // "Composite Veneers", matching Dentacare Osdorp (master 8190c70). The
+    // slug stays "composite-restorations" so existing URLs keep working.
     slug: "composite-restorations",
-    name: "Composite Restorations",
+    name: "Composite Veneers",
     category: "Cosmetic",
     summary: "A gentle way to fix chips, gaps and discolouration in a single visit.",
+    // Approved description, verbatim from Dentacare Osdorp (master 8190c70).
     description:
-      "Composite bonding quickly repairs small imperfections — chips, gaps or uneven edges — and blends seamlessly with your natural teeth. It's a conservative option that protects your healthy tooth structure, often completed in just one appointment.",
+      "Composite veneers use tooth-coloured resin to improve the shape, colour, and appearance of teeth. Treatment is tailored to your smile following a personal assessment.",
     // ARUBA DRAFT: new copy, needs practice review ("affordable" removed -- no fees are published).
     whoFor: "A good option if you want a quick, conservative improvement to a limited number of teeth.",
     icon: "paintbrush",

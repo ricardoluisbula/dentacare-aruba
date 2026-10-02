@@ -43,7 +43,7 @@ const galleryCopy = {
     filters: {
       all: "All Results",
       smileRehabilitation: "Smile Rehabilitation",
-      compositeBonding: "Composite Bonding",
+      compositeBonding: "Composite Veneers",
       crowns: "Crowns",
       veneers: "Porcelain Veneers",
       // ARUBA DRAFT: new copy, needs practice review (was "1 Hour Emergency

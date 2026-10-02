@@ -93,3 +93,15 @@ test("an unknown treatment URL is the site's own 404", async ({ page }) => {
   expect(res?.status()).toBe(404);
   await expect(page.getByRole("heading", { name: "This page doesn't exist" })).toBeVisible();
 });
+
+test("Composite Veneers keeps its existing URL and shows the new name", async ({ page }) => {
+  const res = await page.goto("/treatments/composite-restorations");
+  expect(res?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Composite Veneers/);
+  await expect(page).toHaveTitle(/^Composite Veneers \|/);
+
+  await page.goto("/treatments");
+  await expect(page.getByText("Composite Veneers").first()).toBeVisible();
+  await expect(page.getByText(/Composite Restorations/)).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /About composite veneers/ })).toHaveAttribute("href", "/treatments/composite-restorations");
+});

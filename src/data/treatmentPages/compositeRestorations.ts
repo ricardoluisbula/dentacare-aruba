@@ -2,7 +2,7 @@ import type { TreatmentPageContent } from "./types";
 
 export const compositeRestorations: TreatmentPageContent = {
   overview: [
-    "In a composite restoration, tooth-coloured resin is applied directly to the tooth, built up in layers, then shaped and polished. It is done in the mouth itself, usually within a single appointment.",
+    "With composite veneers, tooth-coloured resin is applied directly to the tooth, built up in layers, then shaped and polished. It is done in the mouth itself, usually within a single appointment.",
     "Because the material bonds to the tooth, little or no healthy tooth structure often needs to be removed. That makes this one of the most conservative ways to repair a small imperfection.",
     "Composite is used both to repair damage and to adjust the shape of a tooth aesthetically. What is appropriate in your situation follows from the examination.",
   ],
@@ -57,7 +57,7 @@ export const compositeRestorations: TreatmentPageContent = {
       answer: "It is the same type of material. The difference is the aim: an aesthetic restoration involves considerably more attention to shape, layered colour and surface finish.",
     },
     {
-      question: "What does a composite restoration cost?",
+      question: "What do composite veneers cost?",
       answer: "That depends on the extent and the number of teeth, so we do not publish a fixed price. You receive a personalized cost estimate beforehand.",
     },
   ],

@@ -37,9 +37,9 @@ const treatmentsCopy = {
         description: "Porcelain veneers: what the treatment involves, who it may suit, the process, its limitations and aftercare.",
       },
       "composite-restorations": {
-        title: `Composite Restorations${DRAFT_SUFFIX}`,
+        title: `Composite Veneers${DRAFT_SUFFIX}`,
         description:
-          "Composite restorations: repairing small imperfections in front teeth, the process, realistic expectations and aftercare.",
+          "Composite veneers: improving the shape, colour and appearance of teeth with tooth-coloured resin — the process, realistic expectations and aftercare.",
       },
       "dental-crowns-bridges": {
         title: `Crowns and Bridges${DRAFT_SUFFIX}`,
@@ -122,7 +122,7 @@ const treatmentsCopy = {
     /** Descriptive link text per treatment -- never just the treatment's name. */
     treatmentLinks: {
       "porcelain-veneers": "Read more about veneers",
-      "composite-restorations": "What composite can repair",
+      "composite-restorations": "About composite veneers",
       "dental-crowns-bridges": "Crown or bridge: the process",
       "dental-implants": "How implants work",
       "emergency-aesthetic-dentistry": "See the emergency treatment",
