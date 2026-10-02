@@ -9,12 +9,12 @@
 // call buttons. Lines written new for Aruba are marked "ARUBA DRAFT: new copy".
 // Everything here needs practice review before launch.
 
-const DRAFT_SUFFIX = " | Dentacare Aruba (Draft)";
+const TITLE_SUFFIX = " | Dentacare Aruba";
 
 const galleryCopy = {
   /** `<title>` and meta description for /smile-gallery (see pageMeta.ts). */
   smileGalleryMeta: {
-    title: `Smile Gallery${DRAFT_SUFFIX}`,
+    title: `Smile Gallery${TITLE_SUFFIX}`,
     // ARUBA DRAFT: new copy, needs practice review.
     description: "Before-and-after photos of veneers, crowns and aesthetic repairs by Sam Abdin. Results differ from person to person.",
   },

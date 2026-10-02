@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { getPageMeta } from "@/lib/i18n/pageMeta";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { resolveLocale, type LocaleParams } from "@/lib/i18n/localeParams";
 import { buildPageMetadata } from "@/lib/seo";
-import { DraftPage } from "@/components/layout/DraftPage";
+import { PolicyBody } from "@/components/legal/PolicyBody";
+import { privacyPolicy } from "@/data/policies";
 
 const PATH = "/privacy";
 
@@ -11,8 +13,8 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
   return buildPageMetadata({ path: PATH, locale, ...getPageMeta(PATH, locale) });
 }
 
-/** ARUBA DRAFT placeholder -- see src/components/layout/DraftPage.tsx. */
+/** Policy text: src/data/policies.ts (open points marked REVIEW there). */
 export default async function PrivacyPage({ params }: LocaleParams) {
-  await resolveLocale(params);
-  return <DraftPage page="privacy" />;
+  const locale = await resolveLocale(params);
+  return <PolicyBody title={getDictionary(locale).pages.privacy.title} policy={privacyPolicy} />;
 }

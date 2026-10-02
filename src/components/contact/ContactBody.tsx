@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Clock, ExternalLink, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, ExternalLink, MapPin } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -98,12 +98,8 @@ export function ContactBody({ entries }: { entries: AvailabilityEntry[] }) {
                 <DetailRow icon={<Clock className={icon} strokeWidth={1.75} aria-hidden="true" />} label={t.contactPage.hoursLabel}>
                   {t.contactPage.hoursValue}
                 </DetailRow>
-                <DetailRow icon={<Phone className={icon} strokeWidth={1.75} aria-hidden="true" />} label={t.contactPage.phoneLabel}>
-                  <span className="italic">{t.draft.pending}</span>
-                </DetailRow>
-                <DetailRow icon={<Mail className={icon} strokeWidth={1.75} aria-hidden="true" />} label={t.contactPage.emailLabel}>
-                  <span className="italic">{t.draft.pending}</span>
-                </DetailRow>
+                {/* Phone and email rows return here once the practice
+                    confirms them; unconfirmed rows are not shown. */}
               </ul>
             </aside>
           </Reveal>

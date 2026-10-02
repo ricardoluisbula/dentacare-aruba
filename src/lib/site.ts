@@ -77,14 +77,20 @@ export const siteConfig = {
   whatsappDisplay: "+31 6 45094057",
   whatsappUrl: "https://wa.me/31645094057",
   instagramUrl: "https://www.instagram.com/Dentacareosdorp/",
+  // PRIVACY CONTACT ONLY (confirmed 2026-10-02). Shown on the Privacy and
+  // Cookie policy pages for questions about personal data. Never use it as a
+  // booking or general contact channel: appointment enquiries go by WhatsApp.
+  privacyEmail: "Dentacare@hotmail.com",
+  // Only finished pages are linked. About, Reviews, New Patients and Fees &
+  // Insurance still exist as unlinked "being prepared" pages until their
+  // content is supplied (docs/ARUBA-LAUNCH-CHECKLIST.md); Privacy and Cookies
+  // stay linked from the footer.
   nav: [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
     { label: "Smile Gallery", href: "/smile-gallery" },
     { label: "Treatments", href: "/treatments" },
     { label: "Prevention & Hygiene", href: "/prevention-hygiene" },
     { label: "Our Team", href: "/team" },
-    { label: "Reviews", href: "/reviews" },
     { label: "Contact", href: "/contact" },
   ],
 } as const;

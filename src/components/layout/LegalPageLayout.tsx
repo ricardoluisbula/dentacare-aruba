@@ -14,7 +14,7 @@ import { Reveal } from "@/components/ui/Reveal";
 export function LegalPageLayout({ title, updated, children }: { title: string; updated?: string; children: ReactNode }) {
   return (
     <section className="pb-20 pt-36 sm:pt-44 sm:pb-28">
-      <Container className="mx-auto flex max-w-2xl flex-col gap-8">
+      <Container className="mx-auto flex !max-w-3xl flex-col gap-8">
         <Reveal>
           <div className="flex flex-col gap-2">
             <h1 className="font-display text-section font-medium leading-[1.1] text-fg">{title}</h1>

@@ -37,7 +37,7 @@ export const FORBIDDEN_TEXT = [
   "619 9397",
   "6199397",
   "45495419",
-  "hotmail",
+  "dentacareosdorp@hotmail",
   "since 2009",
   "sinds 2009",
   "mondcheck",
@@ -57,8 +57,13 @@ export function stripAllowed(html: string, route: string): string {
   return out;
 }
 
+/** The privacy contact: allowed only on the policy pages, never as a booking contact. */
+export const PRIVACY_EMAIL = "Dentacare@hotmail.com";
+export const POLICY_ROUTES = ["/privacy", "/cookies"];
+
 /** True for any link that could contact a clinic other than through the confirmed channels. */
-export function isForbiddenHref(href: string): boolean {
+export function isForbiddenHref(href: string, route = ""): boolean {
+  if (href === `mailto:${PRIVACY_EMAIL}` && POLICY_ROUTES.includes(route)) return false;
   if (/^(tel:|mailto:|sms:)/i.test(href)) return true;
   if (/wa\.me|whatsapp\.com/i.test(href)) return !href.startsWith(`${WHATSAPP_URL}?`) && href !== WHATSAPP_URL;
   if (/instagram\.com/i.test(href)) return href !== INSTAGRAM_URL;

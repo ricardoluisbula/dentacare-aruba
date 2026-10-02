@@ -11,54 +11,54 @@
 // dates). Lines written new for Aruba are marked "ARUBA DRAFT: new copy".
 // Everything here needs practice review before launch.
 
-const DRAFT_SUFFIX = " | Dentacare Aruba (Draft)";
+const TITLE_SUFFIX = " | Dentacare Aruba";
 
 const treatmentsCopy = {
   /** `<title>` and meta description for every route in this module. */
   treatmentsMeta: {
     hub: {
-      title: `Dental Treatments${DRAFT_SUFFIX}`,
+      title: `Dental Treatments${TITLE_SUFFIX}`,
       description:
         "Our dental treatments: from check-ups and aesthetic repair to crowns and bridges, implants, veneers, clear aligners and night guards for teeth grinding.",
     },
     prevention: {
-      title: `Prevention & Hygiene${DRAFT_SUFFIX}`,
+      title: `Prevention & Hygiene${TITLE_SUFFIX}`,
       description:
         "Dental hygiene and prevention: check-ups, professional cleaning, what prevention can and cannot do, and what you can do at home.",
     },
     emergency: {
-      title: `Emergency & Aesthetic Dentistry${DRAFT_SUFFIX}`,
+      title: `Emergency & Aesthetic Dentistry${TITLE_SUFFIX}`,
       description:
         "Aesthetic repair of broken or damaged front teeth: who it may help, what happens during the visit, realistic expectations and what to do after an injury.",
     },
     details: {
       "porcelain-veneers": {
-        title: `Porcelain Veneers${DRAFT_SUFFIX}`,
+        title: `Porcelain Veneers${TITLE_SUFFIX}`,
         description: "Porcelain veneers: what the treatment involves, who it may suit, the process, its limitations and aftercare.",
       },
       "composite-restorations": {
-        title: `Composite Veneers${DRAFT_SUFFIX}`,
+        title: `Composite Veneers${TITLE_SUFFIX}`,
         description:
           "Composite veneers: improving the shape, colour and appearance of teeth with tooth-coloured resin — the process, realistic expectations and aftercare.",
       },
       "dental-crowns-bridges": {
-        title: `Crowns and Bridges${DRAFT_SUFFIX}`,
+        title: `Crowns and Bridges${TITLE_SUFFIX}`,
         description: "Crowns and bridges: when they may be needed, the treatment process, their limitations and aftercare.",
       },
       "dental-implants": {
-        title: `Dental Implants${DRAFT_SUFFIX}`,
+        title: `Dental Implants${TITLE_SUFFIX}`,
         description: "Dental implants: what an implant is, who it may suit, the examination, the treatment process and aftercare.",
       },
       "clear-aligners": {
-        title: `Clear Aligners${DRAFT_SUFFIX}`,
+        title: `Clear Aligners${TITLE_SUFFIX}`,
         description: "Clear aligners: how the treatment works, who it may suit, the process, its limitations and retention afterwards.",
       },
       "root-canal-therapy": {
-        title: `Root Canal Treatment${DRAFT_SUFFIX}`,
+        title: `Root Canal Treatment${TITLE_SUFFIX}`,
         description: "Root canal treatment: when it may be needed, what happens during treatment, its limitations and aftercare.",
       },
       "night-guards": {
-        title: `Custom Night Guard for Teeth Grinding${DRAFT_SUFFIX}`,
+        title: `Custom Night Guard for Teeth Grinding${TITLE_SUFFIX}`,
         description:
           "A custom night guard to help protect your teeth and restorations from wear caused by grinding or clenching (bruxism).",
       },

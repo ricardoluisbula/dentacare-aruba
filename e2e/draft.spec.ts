@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { DRAFT_ROUTES, FORBIDDEN_TEXT, isForbiddenHref, screenshot, scrollThrough, stripAllowed, WHATSAPP_URL } from "./helpers";
+import { DRAFT_ROUTES, FORBIDDEN_TEXT, isForbiddenHref, POLICY_ROUTES, PRIVACY_EMAIL, screenshot, scrollThrough, stripAllowed, WHATSAPP_URL } from "./helpers";
 
 /**
  * Guards the Aruba draft's promises: it stays out of search engines, it shows
@@ -23,7 +23,7 @@ for (const route of DRAFT_ROUTES) {
     }
 
     const hrefs = await page.locator("a[href]").evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
-    expect(hrefs.filter(isForbiddenHref), "forbidden contact links").toEqual([]);
+    expect(hrefs.filter((href) => isForbiddenHref(href, route)), "forbidden contact links").toEqual([]);
   });
 }
 
@@ -104,4 +104,60 @@ test("Composite Veneers keeps its existing URL and shows the new name", async ({
   await expect(page.getByText("Composite Veneers").first()).toBeVisible();
   await expect(page.getByText(/Composite Restorations/)).toHaveCount(0);
   await expect(page.getByRole("link", { name: /About composite veneers/ })).toHaveAttribute("href", "/treatments/composite-restorations");
+});
+
+/** Pages that exist but are still being prepared (unlinked). */
+const UNFINISHED_ROUTES = ["/about", "/reviews", "/new-patients", "/pricing-info"];
+
+for (const route of DRAFT_ROUTES) {
+  test(`launch prep: ${route} shows no draft labels and no links to unfinished pages`, async ({ page }) => {
+    await page.goto(route);
+    await expect(page).not.toHaveTitle(/draft/i);
+    // "Hours to be confirmed" is a legitimate state of a published date.
+    const text = await page.locator("body").innerText();
+    expect(text).not.toMatch(/draft preview|\(draft\)|(?<!hours )to be confirmed|being confirmed|to be supplied|awaiting details|in preparation/i);
+
+    const hrefs = await page.locator("a[href]").evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
+    for (const unfinished of UNFINISHED_ROUTES) {
+      expect(hrefs.filter((h) => h === unfinished || h.startsWith(`${unfinished}#`)), `link to ${unfinished}`).toEqual([]);
+    }
+  });
+}
+
+test("the footer still links Privacy and Cookies", async ({ page }) => {
+  await page.goto("/");
+  const legal = page.getByRole("navigation", { name: "Legal information" });
+  await expect(legal.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", "/privacy");
+  await expect(legal.getByRole("link", { name: "Cookie Policy" })).toHaveAttribute("href", "/cookies");
+  await expect(legal.getByRole("link")).toHaveCount(2);
+});
+
+test("the privacy email appears only on the policy pages, never as a booking contact", async ({ page }) => {
+  for (const route of DRAFT_ROUTES) {
+    await page.goto(route);
+    const text = await page.locator("body").innerText();
+    if (POLICY_ROUTES.includes(route)) {
+      await expect(page.getByRole("link", { name: PRIVACY_EMAIL }).first()).toHaveAttribute("href", `mailto:${PRIVACY_EMAIL}`);
+      expect(text).toMatch(/privacy questions only|For questions, email/);
+    } else {
+      expect(text, route).not.toContain(PRIVACY_EMAIL);
+    }
+  }
+});
+
+test("the policies match the site: no analytics, no embedded third-party content", async ({ page }) => {
+  for (const route of POLICY_ROUTES) {
+    await page.goto(route);
+    await expect(page.getByText(/does not use analytics, advertising or tracking/).first()).toBeVisible();
+  }
+  // Nothing analytics-related loads while analytics is disabled.
+  const requests: string[] = [];
+  page.on("request", (r) => requests.push(r.url()));
+  await page.goto("/");
+  await page.waitForTimeout(1500);
+  expect(requests.filter((u) => /googletagmanager|google-analytics|facebook|instagram\.com\/embed|maps\.googleapis/.test(u))).toEqual([]);
+  expect(await page.locator("iframe").count()).toBe(0);
+  const stored = await page.evaluate(() => ({ cookies: document.cookie, storage: Object.keys(localStorage) }));
+  expect(stored.cookies).toBe("");
+  expect(stored.storage.filter((k) => k !== "theme")).toEqual([]);
 });

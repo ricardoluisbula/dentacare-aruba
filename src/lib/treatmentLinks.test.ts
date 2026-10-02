@@ -27,7 +27,7 @@ const OWN_ROUTE: Record<string, string> = {
 const HAND_BUILT = Object.keys(OWN_ROUTE);
 const expectedPath = (slug: string) => OWN_ROUTE[slug] ?? `/treatments/${slug}`;
 
-const DRAFT_SUFFIX = " | Dentacare Aruba (Draft)";
+const TITLE_SUFFIX = " | Dentacare Aruba";
 
 describe("hub covers the catalogue", () => {
   it("presents every treatment exactly once, across both sections", () => {
@@ -72,7 +72,8 @@ describe("every hub destination exists", () => {
     const all = [meta.hub, meta.prevention, meta.emergency, ...Object.keys(treatmentPages).map((slug) => meta.details[slug])];
     for (const entry of all) {
       expect(entry, "missing metadata").toBeDefined();
-      expect(entry.title.endsWith(DRAFT_SUFFIX), entry.title).toBe(true);
+      expect(entry.title.endsWith(TITLE_SUFFIX), entry.title).toBe(true);
+      expect(entry.title, entry.title).not.toMatch(/draft/i);
       expect(entry.description.length).toBeGreaterThan(0);
       expect(entry.description.length).toBeLessThanOrEqual(200);
     }

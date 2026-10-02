@@ -17,7 +17,7 @@ import { buildPageMetadata } from "@/lib/seo";
  * the shared Instagram profile (its handle contains "osdorp") and the
  * dentist's own verified experience in Amsterdam.
  */
-const ALLOWED = [siteConfig.instagramUrl, "@dentacareosdorp", ...en.teamPage.bio, en.teamPage.experienceValue];
+const ALLOWED = [siteConfig.instagramUrl, "@dentacareosdorp", ...en.teamPage.bio, en.teamPage.experienceValue, siteConfig.privacyEmail];
 
 const FORBIDDEN = [
   /osdorp/i,
@@ -25,7 +25,7 @@ const FORBIDDEN = [
   /calandlaan/i,
   /619\s?9397/,
   /45495419/, // the Amsterdam practice's WhatsApp number
-  /hotmail/i,
+  /hotmail/i, // the Amsterdam practice's address; the Aruba privacy address is allowed above
   /since 2009/i,
   /mondcheck/i,
   /€/,

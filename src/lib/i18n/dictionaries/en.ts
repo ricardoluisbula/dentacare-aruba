@@ -1,14 +1,12 @@
-// English dictionary -- ARUBA DRAFT.
+// English dictionary.
 //
 // Only details the practice has confirmed appear here: the address
 // (Morgenster 35C, Aruba), WhatsApp for messages, Instagram, the dentist (Sam
 // Abdin, with his two verified credentials) and the treatments (see
-// en.treatments.ts). Still NOT carried over from the reference (Amsterdam)
-// site: its address, phone numbers, hours, prices, reviews, legal text and any
-// claim about how long the Aruba practice has operated. The Smile Gallery
-// before-and-after cases (treated by Sam Abdin, see en.gallery.ts) are reused
-// without any claim that they were treated in Aruba.
-// Placeholders say plainly what is still to come
+// en.treatments.ts). Not carried over from the reference (Amsterdam) site:
+// its address, phone numbers, hours, prices, reviews, legal text and any
+// claim about how long the Aruba practice has operated. Unconfirmed details
+// are left out rather than shown as placeholders
 // (docs/ARUBA-LAUNCH-CHECKLIST.md).
 import treatmentsCopy from "./en.treatments";
 import galleryCopy from "./en.gallery";
@@ -54,12 +52,6 @@ const en = {
       label: "Treatments menu",
     },
   },
-  draft: {
-    // Short marker shown wherever a real clinic detail would otherwise go.
-    pending: "To be confirmed",
-    badge: "Draft preview",
-    notice: "Draft preview — not yet a live clinic website. Some details are still being confirmed.",
-  },
   // Appointment enquiries go by WhatsApp message. The wording must never
   // suggest that sending a message books or confirms an appointment.
   whatsapp: {
@@ -84,14 +76,12 @@ const en = {
     listLabel: "Upcoming dates in Aruba",
   },
   hero: {
-    badge: "Draft preview",
+    badge: "Dental care in Aruba",
     headlinePrefix: "Dentacare Aruba",
     headlineAccent: "Artistry in every smile",
     paragraph:
       "Dental care with Sam Abdin at Morgenster 35C, Aruba, on scheduled dates. See when the dentist is in Aruba and send a WhatsApp message to ask about an appointment.",
     ctaDates: "See upcoming dates",
-    imagePlaceholderTitle: "Hero photograph",
-    imagePlaceholderNote: "Aruba clinic photo to be supplied",
   },
   homeDentist: {
     eyebrow: "Your dentist",
@@ -99,27 +89,6 @@ const en = {
     body: "Sam Abdin trained at the University of Groningen and sees patients at Dentacare Aruba on the dates listed on this website.",
     cta: "About Sam Abdin",
     treatmentsCta: "Explore treatments",
-  },
-  overview: {
-    eyebrow: "Still to come",
-    title: "A few details are still being confirmed",
-    description: "These parts of the website will be completed once the practice has supplied and reviewed them.",
-    status: "Awaiting details",
-    open: "Open page",
-    items: {
-      about: {
-        title: "About the practice",
-        body: "The Aruba practice's story and photos of the clinic.",
-      },
-      reviews: {
-        title: "Reviews",
-        body: "Genuine reviews from Aruba patients, linked to their original source.",
-      },
-      contact: {
-        title: "Phone & email",
-        body: "A phone number for calls and an email address for the Aruba practice.",
-      },
-    },
   },
   cta: {
     eyebrow: "Appointments",
@@ -137,8 +106,6 @@ const en = {
     mapsLink: "Open in Google Maps",
     whatsappLabel: "WhatsApp",
     instagramLabel: "Instagram",
-    phoneLabel: "Phone",
-    emailLabel: "Email",
     hoursLabel: "Opening hours",
     hoursValue: "No fixed weekly hours — see the dates in Aruba.",
   },
@@ -159,76 +126,50 @@ const en = {
     educationValue: "University of Groningen (Rijksuniversiteit Groningen), Netherlands",
     experienceLabel: "Experience",
     experienceValue: "Practising dentistry in Amsterdam since 2009",
-    teamNote: "Other members of the Aruba team will be introduced once confirmed.",
   },
-  draftPage: {
-    panelEyebrow: "Content in preparation",
-    panelTitle: "This page is waiting for the practice's details",
-    needsHeading: "To publish this page we need",
+  // Pages whose content is still being prepared (About, Reviews, New
+  // Patients, Fees & Insurance -- unlinked -- and Privacy and Cookies, linked
+  // from the footer). Patients see a short, honest note; the information
+  // still needed is listed in docs/ARUBA-LAUNCH-CHECKLIST.md.
+  preparingPage: {
+    notice: "In the meantime, the Contact page has our address, WhatsApp and the dates the dentist is in Aruba.",
+    contactLink: "Contact & dates in Aruba",
     backHome: "Back to home",
   },
-  // Hero copy and outstanding needs for pages that are still placeholders,
-  // plus the <title>/description source for every page (see pageMeta.ts).
+  // <title>/description source for every page (see pageMeta.ts), and the
+  // hero copy of the pages still being prepared.
   pages: {
     about: {
       title: "About Dentacare Aruba",
-      description: "The story of the Aruba practice will be told here.",
-      needs: [
-        "A short description of the Aruba practice in your own words",
-        "Photos of the Aruba clinic interior and exterior",
-      ],
+      description: "More about the practice will be published here soon.",
     },
     team: {
       title: "Sam Abdin, dentist",
       description: "Meet Sam Abdin, the dentist at Dentacare Aruba, Morgenster 35C, Aruba.",
-      needs: [],
     },
     reviews: {
       title: "Reviews",
-      description: "Reviews from Aruba patients will be shown here.",
-      needs: [
-        "Genuine reviews from Aruba patients, with permission to publish",
-        "The link to the practice's Google Business Profile (if any)",
-      ],
+      description: "Patient reviews will be published here soon.",
     },
     contact: {
       title: "Contact & dates in Aruba",
       description: "Dentacare Aruba, Morgenster 35C, Aruba. Upcoming dates in Aruba and WhatsApp appointment enquiries.",
-      needs: [],
     },
     newPatients: {
       title: "New Patients",
-      description: "What new patients should know before their first visit will appear here.",
-      needs: [
-        "Whether the practice is accepting new patients",
-        "How to register and what to bring to a first visit",
-        "Accepted insurance providers, if you want these published",
-      ],
+      description: "Information for new patients will be published here soon.",
     },
     pricingInfo: {
       title: "Fees & Insurance",
-      description: "Information about fees and insurance will appear here.",
-      needs: [
-        "Whether fees should be published at all, and the Aruba fees if so",
-        "Accepted insurance and payment methods",
-      ],
+      description: "Information about fees and insurance will be published here soon.",
     },
     privacy: {
       title: "Privacy Policy",
-      description: "The practice's privacy policy will be published here.",
-      needs: [
-        "The legal name of the practice entity",
-        "A privacy policy reviewed for Aruba law",
-        "Contact details for privacy questions",
-      ],
+      description: "How the Dentacare Aruba website handles personal information, and who to contact with questions.",
     },
     cookies: {
       title: "Cookie Policy",
-      description: "The website's cookie policy will be published here.",
-      needs: [
-        "Whether website analytics will be used",
-        "A cookie policy reviewed for Aruba law",
-      ],
+      description: "What the Dentacare Aruba website stores in your browser.",
     },
   },
   footer: {
@@ -237,16 +178,12 @@ const en = {
     visitHeading: "Visit",
     addressLabel: "Address",
     whatsappLabel: "WhatsApp",
-    phoneLabel: "Phone",
-    emailLabel: "Email",
     datesLabel: "Dates in Aruba",
     datesLink: "See upcoming dates",
     rightsReserved: "All rights reserved.",
     legalNavLabel: "Legal information",
     privacyPolicyLink: "Privacy Policy",
     cookiePolicyLink: "Cookie Policy",
-    pricingInfoLink: "Fees & Insurance",
-    newPatientsLink: "New Patients",
   },
   notFound: {
     title: "This page doesn't exist",

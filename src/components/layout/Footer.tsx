@@ -2,10 +2,9 @@
 
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { ANALYTICS_CONFIGURED, openCookieSettings, trackEvent } from "@/lib/analytics";
-import { CalendarDays, MapPin, Mail, Phone } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import { navLabel } from "@/lib/navKeys";
-import { NEW_PATIENTS_PATH } from "@/lib/redirects";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/layout/Logo";
 import { InstagramIcon, WhatsAppIcon } from "@/components/ui/SocialIcons";
@@ -20,14 +19,9 @@ export function Footer() {
   const whatsappHref = useWhatsAppHref();
   const iconClass = "mt-0.5 h-4 w-4 shrink-0 text-accent";
 
-  // Confirmed details only (address, WhatsApp, Instagram). Phone and email
-  // stay plain-text "to be confirmed" -- never a tel:/mailto: link -- until
-  // the practice supplies them. There are no fixed opening hours: the column
-  // links to the dates the dentist is in Aruba instead.
-  const pendingRows = [
-    { icon: Phone, label: t.footer.phoneLabel },
-    { icon: Mail, label: t.footer.emailLabel },
-  ];
+  // Confirmed details only: address, WhatsApp (messages) and Instagram. Phone
+  // and email rows are not shown until the practice supplies them. There are
+  // no fixed opening hours: the column links to the dates in Aruba instead.
 
   return (
     <footer className="relative mt-32 border-t border-surface-border bg-bg-elevated">
@@ -58,11 +52,6 @@ export function Footer() {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href={NEW_PATIENTS_PATH} className={LINK_CLASS}>
-                {t.footer.newPatientsLink}
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -110,15 +99,6 @@ export function Footer() {
                 </Link>
               </span>
             </li>
-            {pendingRows.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-start gap-3">
-                <Icon className={iconClass} strokeWidth={1.75} aria-hidden="true" />
-                <span>
-                  <span className="block text-fg">{label}</span>
-                  <span className="block italic">{t.draft.pending}</span>
-                </span>
-              </li>
-            ))}
           </ul>
         </div>
       </Container>
@@ -132,9 +112,6 @@ export function Footer() {
             <Link href="/cookies" className={LINK_CLASS}>
               {t.footer.cookiePolicyLink}
             </Link>
-            <Link href="/pricing-info" className={LINK_CLASS}>
-              {t.footer.pricingInfoLink}
-            </Link>
             {/* Reopens the consent banner so the analytics choice can be changed
                 or withdrawn at any time. Only present when the build has GA
                 configured -- without it there is nothing to consent to. */}
@@ -145,12 +122,9 @@ export function Footer() {
             )}
           </nav>
 
-          <div className="flex w-full flex-col items-center justify-between gap-3 text-center text-xs text-fg-muted sm:flex-row sm:text-left">
-            <p>
-              © {new Date().getFullYear()} {siteConfig.name}. {t.footer.rightsReserved}
-            </p>
-            <p className="font-medium text-accent-deep dark:text-accent">{t.draft.notice}</p>
-          </div>
+          <p className="text-center text-xs text-fg-muted">
+            © {new Date().getFullYear()} {siteConfig.name}. {t.footer.rightsReserved}
+          </p>
         </Container>
       </div>
     </footer>

@@ -70,7 +70,6 @@ export function TeamBody() {
                     </div>
                   </dl>
                 </div>
-                <p className="text-sm italic text-fg-muted">{p.teamNote}</p>
               </div>
             </article>
           </Reveal>

@@ -10,7 +10,6 @@ import { SignatureTransformation } from "@/components/sections/SignatureTransfor
 import { HomeDentist } from "@/components/sections/HomeDentist";
 import { EmergencyService } from "@/components/sections/EmergencyService";
 import { SmileGalleryPreview } from "@/components/sections/SmileGalleryPreview";
-import { DraftOverview } from "@/components/sections/DraftOverview";
 import { CTASection } from "@/components/sections/CTASection";
 
 const PATH = "/";
@@ -29,11 +28,10 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 }
 
 /**
- * ARUBA DRAFT home page. Before-and-after photos (treated by Sam Abdin, see
+ * Home page. Before-and-after photos (treated by Sam Abdin, see
  * src/data/beforeAfterCases.ts) appear in SignatureTransformation,
  * EmergencyService and SmileGalleryPreview. Sections that would present
- * unconfirmed facts (trust bar, reviews, languages spoken) are not rendered;
- * DraftOverview lists what is still to come.
+ * unconfirmed facts (trust bar, reviews, languages spoken) are not rendered.
  */
 export default async function Home({ params }: LocaleParams) {
   await resolveLocale(params);
@@ -48,7 +46,6 @@ export default async function Home({ params }: LocaleParams) {
       <HomeDentist />
       <EmergencyService />
       <SmileGalleryPreview />
-      <DraftOverview />
       <CTASection />
     </>
   );
