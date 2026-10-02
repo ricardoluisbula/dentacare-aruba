@@ -16,11 +16,11 @@ export type PageMetaEntry = { title: string; description: string };
 
 /**
  * Route -> the dictionary page entry whose copy describes it. Treatment and
- * prevention routes build their own metadata from en.treatments.ts.
+ * prevention routes build their own metadata from en.treatments.ts; the Smile
+ * Gallery has hand-written metadata in en.gallery.ts.
  */
 export const PAGE_KEY_BY_ROUTE: Record<string, keyof Dictionary["pages"]> = {
   "/about": "about",
-  "/smile-gallery": "smileGallery",
   "/team": "team",
   "/reviews": "reviews",
   "/contact": "contact",
@@ -35,6 +35,10 @@ export function getPageMeta(path: string, locale: Locale): PageMetaEntry {
 
   if (path === "/") {
     return { title: `${siteConfig.name} (Draft)`, description: siteConfig.description };
+  }
+
+  if (path === "/smile-gallery") {
+    return { title: t.smileGalleryMeta.title, description: t.smileGalleryMeta.description };
   }
 
   const key = PAGE_KEY_BY_ROUTE[path];

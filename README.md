@@ -20,9 +20,14 @@ champagne gold (`#C6A664`) on ivory with dark typography.
   espresso tokens in `src/app/globals.css`; favicons and OG image regenerated
   with `node assets-source/generate-brand-assets.mjs`.
 - **No Amsterdam practice facts**: its address, phones, email, hours, prices,
-  reviews, patient cases and legal text are not used. Treatment explanations
-  are reused without Amsterdam wording or prices. Pages still waiting on
-  content render `DraftPage` placeholders listing what is needed.
+  reviews and legal text are not used. Treatment explanations are reused
+  without Amsterdam wording or prices. The Smile Gallery and the home,
+  treatments, emergency, prevention and team pages reuse photos from the
+  Osdorp site — Sam Abdin's portrait, a professional-cleaning photo and
+  before-and-after cases treated by Sam Abdin — without any claim that the
+  cases were treated in Aruba; photos of the Amsterdam premises or with an
+  Osdorp watermark are not used (`src/lib/images.test.ts`). Pages still
+  waiting on content render `DraftPage` placeholders listing what is needed.
 - **Contact**: WhatsApp *message* link to the Aruba number (never `tel:`),
   Morgenster 35C map link, Instagram. No phone, email or contact form yet.
 - **Dates in Aruba**: no fixed hours; the team enters dates in `/admin`

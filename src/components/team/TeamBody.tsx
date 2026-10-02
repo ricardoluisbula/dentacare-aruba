@@ -1,6 +1,7 @@
 "use client";
 
-import { GraduationCap, Stethoscope, UserRound } from "lucide-react";
+import Image from "next/image";
+import { GraduationCap, Stethoscope } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/animations/Reveal";
@@ -12,7 +13,8 @@ import { useTranslation } from "@/lib/i18n/LanguageProvider";
  * (University of Groningen) and that he has practised dentistry in Amsterdam
  * since 2009 -- a fact about him, not about the Aruba practice. No title
  * ("Dr."), specialism, memberships or biography claims until confirmed. The
- * portrait slot stays a placeholder until an approved photo is supplied.
+ * portrait is the reference site's photo of Sam Abdin, shown whole
+ * (object-contain, anchored to the top) on an ivory mat.
  */
 export function TeamBody() {
   const { t } = useTranslation();
@@ -26,9 +28,16 @@ export function TeamBody() {
         <Container className="max-w-5xl">
           <Reveal>
             <article className="glass grid gap-10 rounded-[2.5rem] p-6 sm:p-10 md:grid-cols-[auto_1fr] md:gap-14 lg:p-14">
-              <div className="mx-auto flex aspect-[4/5] w-56 flex-col items-center justify-center gap-3 rounded-[1.75rem] border border-dashed border-accent/50 bg-gradient-to-b from-gold-50 to-gold-100 text-center text-gold-700 sm:w-64 dark:from-ink-800 dark:to-gold-950 dark:text-gold-300">
-                <UserRound className="h-12 w-12" strokeWidth={1.25} aria-hidden="true" />
-                <span className="px-4 text-xs font-medium">{p.portraitPlaceholder}</span>
+              <div className="mx-auto h-fit w-56 overflow-hidden rounded-[1.75rem] border border-surface-border bg-ivory-200 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.2)] sm:w-64">
+                <Image
+                  src="/images/team/sam.webp"
+                  alt={t.imageAlts.samPortrait}
+                  width={1279}
+                  height={1600}
+                  sizes="(min-width: 640px) 256px, 224px"
+                  priority
+                  className="h-auto w-full object-contain object-top"
+                />
               </div>
 
               <div className="flex flex-col gap-6">

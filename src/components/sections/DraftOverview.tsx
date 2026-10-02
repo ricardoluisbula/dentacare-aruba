@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Building2, Images, MessageSquareQuote, Phone } from "lucide-react";
+import { ArrowUpRight, Building2, MessageSquareQuote, Phone } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { LocaleLink as Link } from "@/components/ui/LocaleLink";
 import { Container } from "@/components/ui/Container";
@@ -14,7 +14,6 @@ type ItemKey = keyof Dictionary["overview"]["items"];
 
 const ITEMS: { key: ItemKey; href: string; icon: LucideIcon }[] = [
   { key: "about", href: "/about", icon: Building2 },
-  { key: "smileGallery", href: "/smile-gallery", icon: Images },
   { key: "reviews", href: "/reviews", icon: MessageSquareQuote },
   { key: "contact", href: "/contact", icon: Phone },
 ];
@@ -34,7 +33,7 @@ export function DraftOverview() {
       <Container>
         <SectionHeading eyebrow={t.overview.eyebrow} title={t.overview.title} description={t.overview.description} />
 
-        <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map(({ key, href, icon: Icon }) => {
             const item = t.overview.items[key];
             return (

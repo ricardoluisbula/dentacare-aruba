@@ -4,14 +4,18 @@
 // (Morgenster 35C, Aruba), WhatsApp for messages, Instagram, the dentist (Sam
 // Abdin, with his two verified credentials) and the treatments (see
 // en.treatments.ts). Still NOT carried over from the reference (Amsterdam)
-// site: its address, phone numbers, hours, prices, reviews, patient cases,
-// legal text and any claim about how long the Aruba practice has operated.
+// site: its address, phone numbers, hours, prices, reviews, legal text and any
+// claim about how long the Aruba practice has operated. The Smile Gallery
+// before-and-after cases (treated by Sam Abdin, see en.gallery.ts) are reused
+// without any claim that they were treated in Aruba.
 // Placeholders say plainly what is still to come
 // (docs/ARUBA-LAUNCH-CHECKLIST.md).
 import treatmentsCopy from "./en.treatments";
+import galleryCopy from "./en.gallery";
 
 const en = {
   ...treatmentsCopy,
+  ...galleryCopy,
   common: {
     scrollToTop: "Scroll to top",
     cookieConsentAriaLabel: "Cookie consent",
@@ -107,10 +111,6 @@ const en = {
         title: "About the practice",
         body: "The Aruba practice's story and photos of the clinic.",
       },
-      smileGallery: {
-        title: "Smile Gallery",
-        body: "Before-and-after cases from Aruba patients, published only with their consent.",
-      },
       reviews: {
         title: "Reviews",
         body: "Genuine reviews from Aruba patients, linked to their original source.",
@@ -159,7 +159,6 @@ const en = {
     educationValue: "University of Groningen (Rijksuniversiteit Groningen), Netherlands",
     experienceLabel: "Experience",
     experienceValue: "Practising dentistry in Amsterdam since 2009",
-    portraitPlaceholder: "Portrait to be supplied",
     teamNote: "Other members of the Aruba team will be introduced once confirmed.",
   },
   draftPage: {
@@ -177,15 +176,6 @@ const en = {
       needs: [
         "A short description of the Aruba practice in your own words",
         "Photos of the Aruba clinic interior and exterior",
-      ],
-    },
-    smileGallery: {
-      title: "Smile Gallery",
-      description: "Before-and-after results from Aruba patients will be shown here.",
-      needs: [
-        "Before-and-after photo pairs from Aruba patients",
-        "Written consent from each patient for publication",
-        "The treatment performed for each case",
       ],
     },
     team: {

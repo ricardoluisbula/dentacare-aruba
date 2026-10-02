@@ -16,6 +16,7 @@ disallow, empty sitemap) until `SITE_IS_DRAFT` in `src/lib/site.ts` is set to
 - [x] Dentist: Sam Abdin — education (University of Groningen) and "practising dentistry in Amsterdam since 2009" (his own experience, not the Aruba practice's)
 - [x] Treatments: the same treatments as Dentacare Osdorp, explanations reused without Amsterdam wording or prices
 - [x] No fixed opening hours: dates are entered in the private editor (see [ARUBA-DATES.md](ARUBA-DATES.md))
+- [x] Photos reused from the Dentacare Osdorp website (Smile Gallery, home page, treatments, emergency and prevention pages, Our Team): the portrait of Sam Abdin, the professional-cleaning photo and before-and-after cases **treated by Sam Abdin**. The site never says these cases were treated in Aruba. Photos showing the Amsterdam premises or signage, or carrying an Osdorp watermark, were not copied (see `src/lib/images.test.ts`).
 
 ## 1. Still needed: contact and setup
 
@@ -33,7 +34,7 @@ disallow, empty sitemap) until `SITE_IS_DRAFT` in `src/lib/site.ts` is set to
 | Our Team | Confirm the title to use (the draft says "Sam Abdin, Dentist" — not "Dr."), any further verified credentials (registration, languages), a biography, and other team members |
 | Treatments | Review the reused explanations for Aruba; confirm the new emergency safety note (marked `ARUBA DRAFT` in the code) |
 | About | The Aruba practice's story in your own words |
-| Smile Gallery | Before-and-after cases from **Aruba** patients, the treatment for each, and each patient's written consent |
+| Smile Gallery | The gallery shows before-and-after cases from the Dentacare Osdorp website, all treated by Sam Abdin. **Confirm that each patient's consent covers publication on this second (Aruba) website** — remove any case where it does not (`src/data/beforeAfterCases.ts`). Review the new gallery wording marked `ARUBA DRAFT` (e.g. "All cases shown were treated by Sam Abdin. Results differ from person to person."). Add Aruba cases later, with consent, if wanted |
 | Reviews | Genuine reviews from Aruba patients (with permission) and their source |
 | New Patients | Whether new patients are accepted; how to register; what to bring; accepted insurers |
 | Fees & Insurance | Whether fees are published at all, and the Aruba fees if so (Osdorp prices were not copied) |
@@ -43,8 +44,11 @@ disallow, empty sitemap) until `SITE_IS_DRAFT` in `src/lib/site.ts` is set to
 
 - [ ] Hero photograph for the home page (landscape, at least 1672×941 px)
 - [ ] Photos of the Aruba clinic: exterior, reception/waiting area, treatment room
-- [ ] Approved portrait of Sam Abdin (the Osdorp portrait can be reused if you approve it)
-- [ ] Before-and-after photo pairs (with consent), if a Smile Gallery is wanted
+- [ ] Approve reusing the Osdorp portrait of Sam Abdin (now on the home page and Our Team), or supply another
+- [ ] Confirm patient consent covers this second website for every reused before-and-after case (Smile Gallery, home page, treatments hub, emergency page)
+- [ ] Approve reusing the professional-cleaning photo (prevention page and treatments hub)
+- [ ] Composite restorations card on the treatments hub has no photo (the reference used a Porcelain Veneers result, case-10, which would misrepresent composite work); supply a composite result if wanted
+- [ ] Dental implants card on the treatments hub has no photo (the reference used a photo of the Amsterdam premises' instruments); supply one if wanted
 - [ ] Approval of the gold wordmark and icon (`assets-source/`), or an official Aruba logo file
 
 ## 4. Decisions

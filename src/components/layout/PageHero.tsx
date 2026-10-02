@@ -26,13 +26,13 @@ export function PageHero({
           </span>
         </Reveal>
         <Reveal delay={0.1} className="w-full min-w-0">
-          <h1 className="mt-6 w-full max-w-3xl text-balance break-words font-display text-hero font-medium leading-[1.05] text-fg">
+          <h1 className="mx-auto mt-6 w-full max-w-3xl text-balance break-words font-display text-hero font-medium leading-[1.05] text-fg">
             {title}
           </h1>
         </Reveal>
         {description && (
           <Reveal delay={0.2} className="w-full min-w-0">
-            <p className="mt-6 max-w-xl text-balance text-base leading-relaxed text-fg-muted sm:text-lg">
+            <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-fg-muted sm:text-lg">
               {description}
             </p>
           </Reveal>

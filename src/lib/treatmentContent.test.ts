@@ -3,12 +3,16 @@ import { treatments } from "@/data/treatments";
 import { treatmentPages } from "@/data/treatmentPages";
 import { preventiveCare } from "@/data/treatmentPages/preventiveCare";
 import treatmentsCopy from "./i18n/dictionaries/en.treatments";
+import galleryCopy from "./i18n/dictionaries/en.gallery";
+import { beforeAfterCases } from "@/data/beforeAfterCases";
 
 /**
  * ARUBA DRAFT guard for the treatment content ported from the reference
  * (Amsterdam) practice: no Netherlands-specific wording, no prices, no
- * direct-contact actions, no patient photos or reviews, no availability
- * promises the Aruba schedule cannot keep, and no "Dr." title.
+ * direct-contact actions, no reviews, no availability promises the Aruba
+ * schedule cannot keep, and no "Dr." title. The before-and-after cases and
+ * their copy (en.gallery.ts) are held to the same rules, except that they may
+ * of course mention the gallery and before-and-after results.
  */
 
 const FORBIDDEN: RegExp[] = [
@@ -44,6 +48,46 @@ const FORBIDDEN: RegExp[] = [
 ];
 
 const everything = JSON.stringify({ treatments, treatmentPages, preventiveCare, treatmentsCopy });
+
+/** Patterns the gallery content may legitimately match: it IS the before-and-after gallery. */
+const GALLERY_ALLOWED = new Set([String(/before-and-after/i), String(/gallery/i)]);
+const GALLERY_FORBIDDEN = [
+  ...FORBIDDEN.filter((pattern) => !GALLERY_ALLOWED.has(String(pattern))),
+  /prices?/i,
+  /aruba patients?/i,
+  /treated in aruba/i,
+  /immediate/i,
+];
+const galleryContent = JSON.stringify({ galleryCopy, beforeAfterCases });
+
+describe("ported gallery content", () => {
+  it.each(GALLERY_FORBIDDEN.map((pattern) => [String(pattern), pattern] as const))("contains nothing matching %s", (_, pattern) => {
+    expect(galleryContent).not.toMatch(pattern);
+  });
+
+  it("has no price fields on any case", () => {
+    for (const item of beforeAfterCases) {
+      expect(Object.keys(item).some((key) => key.toLowerCase().startsWith("price")), item.id).toBe(false);
+    }
+  });
+
+  it("says who treated the cases without claiming they were treated in Aruba", () => {
+    expect(galleryCopy.smileGallery.treatedByNote).toBe(
+      "All cases shown were treated by Sam Abdin. Results differ from person to person."
+    );
+  });
+
+  it("gives every case a non-empty before and after alt text", () => {
+    for (const item of beforeAfterCases) {
+      expect(item.beforeAlt.trim(), item.id).not.toBe("");
+      expect(item.afterAlt.trim(), item.id).not.toBe("");
+    }
+  });
+
+  it("has exactly one featured case", () => {
+    expect(beforeAfterCases.filter((item) => item.featured).map((item) => item.id)).toEqual(["case-09"]);
+  });
+});
 
 describe("ported treatment content", () => {
   it.each(FORBIDDEN.map((pattern) => [String(pattern), pattern] as const))("contains nothing matching %s", (_, pattern) => {

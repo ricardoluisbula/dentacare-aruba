@@ -12,7 +12,13 @@ import { CTASection } from "@/components/sections/CTASection";
 import { treatmentIcons } from "@/components/treatments/TreatmentIcons";
 import { getTreatment, type Treatment } from "@/data/treatments";
 import { treatmentPages, type TreatmentPageSection } from "@/data/treatmentPages";
-import { RELATED_TREATMENT_SLUGS, treatmentDetailPath, type TreatmentSlug } from "@/lib/treatmentLinks";
+import {
+  RELATED_TREATMENT_SLUGS,
+  galleryCategoryForTreatment,
+  galleryResultsPath,
+  treatmentDetailPath,
+  type TreatmentSlug,
+} from "@/lib/treatmentLinks";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
 /**
@@ -22,9 +28,11 @@ import { useTranslation } from "@/lib/i18n/LanguageProvider";
  * whether it applies to them, what happens, what it cannot do, what they are
  * responsible for afterwards, and the questions they were going to ask anyway.
  *
- * ARUBA DRAFT: the reference template's price block, before-and-after link,
- * online "Dental Check" invitation and direct-contact buttons were removed;
- * the closing call to action is the shared CTASection.
+ * ARUBA DRAFT: the reference template's price block, online "Dental Check"
+ * invitation and direct-contact buttons were removed; the closing call to
+ * action is the shared CTASection. Its before-and-after link is kept only on
+ * pages whose treatment has cases in the Smile Gallery, and opens the gallery
+ * on that category.
  */
 export function TreatmentDetailBody({ slug }: { slug: string }) {
   const { t } = useTranslation();
@@ -34,6 +42,7 @@ export function TreatmentDetailBody({ slug }: { slug: string }) {
   const copy = t.treatmentDetail;
   const Icon = treatmentIcons[item.icon];
   const related = RELATED_TREATMENT_SLUGS[slug as TreatmentSlug] ?? [];
+  const galleryCategory = galleryCategoryForTreatment(slug);
 
   return (
     <>
@@ -163,7 +172,7 @@ export function TreatmentDetailBody({ slug }: { slug: string }) {
             </p>
           </Reveal>
 
-          {related.length > 0 && (
+          {(related.length > 0 || galleryCategory) && (
             <Reveal delay={0.1} className="flex flex-col gap-4">
               <h2 className="font-display text-sm uppercase tracking-[0.2em] text-fg">{copy.relatedTitle}</h2>
               <div className="flex flex-wrap gap-4">
@@ -173,6 +182,12 @@ export function TreatmentDetailBody({ slug }: { slug: string }) {
                     <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
                   </Button>
                 ))}
+                {galleryCategory && (
+                  <Button href={galleryResultsPath(galleryCategory)} variant="outline">
+                    {t.galleryLinks.resultsLink}
+                    <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+                  </Button>
+                )}
               </div>
             </Reveal>
           )}

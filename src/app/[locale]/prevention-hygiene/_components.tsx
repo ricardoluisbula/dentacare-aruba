@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -33,35 +34,78 @@ import { useTranslation } from "@/lib/i18n/LanguageProvider";
  * The Prevention & Hygiene page -- the information page for the
  * "preventive-care" treatment.
  *
- * ARUBA DRAFT: ported from the reference site with its clinic photographs,
- * call / email / WhatsApp rows, opening-hours logic and online "Dental Check"
- * invitation removed. The closing call to action is the shared CTASection.
+ * ARUBA DRAFT: ported from the reference site with its hero photo of a
+ * professional cleaning. Its clinic-interior photo, call / email / WhatsApp
+ * rows, opening-hours logic and online "Dental Check" invitation were
+ * removed. The closing call to action is the shared CTASection.
  */
 
 function PreventionHero() {
   const { t } = useTranslation();
   const copy = t.preventionHygienePage;
+  const STAGGER = 0.14;
+  const DISTANCE = 18;
 
   return (
-    <section className="relative overflow-hidden pb-16 pt-36 sm:pb-24 sm:pt-44">
+    <section className="relative overflow-hidden bg-ivory-100/40 pt-28 pb-12 sm:pt-32 sm:pb-16 dark:bg-transparent">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,var(--accent-glow),transparent)] opacity-60 dark:opacity-40"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[640px] bg-[radial-gradient(ellipse_65%_55%_at_50%_-8%,var(--accent-glow),transparent)] opacity-70 dark:opacity-45"
       />
-      <Container className="flex w-full min-w-0 flex-col items-center text-center">
-        <Reveal>
-          <span className="inline-flex items-center gap-2 rounded-full border border-surface-border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-accent-deep dark:text-accent">
+      <Container className="!max-w-[1560px] grid w-full items-center gap-12 lg:grid-cols-[0.82fr_1fr] lg:gap-16">
+        <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
+          <Reveal
+            as="span"
+            delay={STAGGER}
+            distance={DISTANCE}
+            duration={0.6}
+            className="inline-flex items-center gap-2 rounded-full border border-surface-border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-accent-deep dark:text-accent"
+          >
             {copy.heroEyebrow}
-          </span>
-        </Reveal>
-        <Reveal as="h1" delay={0.1} className="mt-6 w-full max-w-3xl text-balance break-words font-display text-hero font-medium leading-[1.05] text-fg">
-          {copy.heroTitle}
-        </Reveal>
-        <Reveal as="p" delay={0.2} className="mt-5 max-w-xl text-balance font-display text-lg italic leading-snug text-accent-deep dark:text-accent">
-          {copy.heroSubtitle}
-        </Reveal>
-        <Reveal as="p" delay={0.3} className="mt-4 max-w-xl text-balance text-base leading-relaxed text-fg-muted sm:text-lg">
-          {copy.heroDescription}
+          </Reveal>
+          <Reveal
+            as="h1"
+            delay={STAGGER * 2}
+            distance={DISTANCE}
+            duration={0.6}
+            className="mt-4 w-full max-w-xl text-balance break-words font-display text-[clamp(2rem,1.3rem+3.2vw,3.5rem)] font-medium leading-[1.05] text-fg"
+          >
+            {copy.heroTitle}
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={STAGGER * 3}
+            distance={DISTANCE}
+            duration={0.55}
+            className="mt-4 max-w-lg text-balance font-display text-lg italic leading-snug text-accent-deep dark:text-accent"
+          >
+            {copy.heroSubtitle}
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={STAGGER * 4}
+            distance={DISTANCE}
+            duration={0.6}
+            className="mt-4 max-w-lg text-balance text-base leading-relaxed text-fg-muted sm:text-lg"
+          >
+            {copy.heroDescription}
+          </Reveal>
+        </div>
+
+        {/* Rendered at the photo's own native ratio (1536x1024) via intrinsic
+            width/height + h-auto, so nothing is cropped or stretched. */}
+        <Reveal delay={STAGGER * 3} distance={0} duration={0.9} className="relative mx-auto w-full lg:max-w-[680px]">
+          <div className="overflow-hidden rounded-[32px] border border-gold-200/80 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.35)] dark:border-gold-900/50">
+            <Image
+              src="/images/prevention-hygiene-professional-cleaning.png"
+              alt={t.imageAlts.preventionCleaning}
+              width={1536}
+              height={1024}
+              priority
+              sizes="(max-width: 1023px) 100vw, 680px"
+              className="h-auto w-full object-cover object-center"
+            />
+          </div>
         </Reveal>
       </Container>
     </section>

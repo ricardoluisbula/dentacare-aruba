@@ -1,4 +1,5 @@
 import { treatments } from "@/data/treatments";
+import { beforeAfterCases, type TreatmentCategory } from "@/data/beforeAfterCases";
 import { PREVENTION_PATH } from "@/lib/redirects";
 
 /**
@@ -57,6 +58,45 @@ export function hubCoversEveryTreatment(): boolean {
   const catalogue = treatments.map((t) => t.slug).sort();
   const hub = [...HUB_SLUGS].sort();
   return catalogue.length === hub.length && catalogue.every((slug, i) => slug === hub[i]);
+}
+
+/**
+ * The treatment page a Smile Gallery case links to, by the case's category.
+ * Ported from the reference site.
+ *
+ * Smile rehabilitation has no entry on purpose: those cases combine several
+ * treatments, and pointing them at any single one of them would misdescribe
+ * what was done.
+ */
+export const GALLERY_CATEGORY_TREATMENT: Partial<Record<TreatmentCategory, TreatmentSlug>> = {
+  veneers: "porcelain-veneers",
+  crowns: "dental-crowns-bridges",
+  "composite-bonding": "composite-restorations",
+  emergency: "emergency-aesthetic-dentistry",
+};
+
+/** Hash prefix the Smile Gallery grid reads to open with one category selected. */
+export const GALLERY_FILTER_HASH_PREFIX = "results-";
+
+/** The Smile Gallery, opened on one treatment category's cases. */
+export function galleryResultsPath(category: TreatmentCategory): string {
+  return `/smile-gallery#${GALLERY_FILTER_HASH_PREFIX}${category}`;
+}
+
+/**
+ * The gallery category whose cases a treatment page may link to as "see
+ * results" -- only when the gallery grid actually shows at least one case in
+ * that category (the featured case sits outside the grid), so the link never
+ * leads to an empty filter.
+ */
+export function galleryCategoryForTreatment(slug: string): TreatmentCategory | undefined {
+  const entry = (Object.entries(GALLERY_CATEGORY_TREATMENT) as [TreatmentCategory, TreatmentSlug][]).find(
+    ([, treatmentSlug]) => treatmentSlug === slug
+  );
+  if (!entry) return undefined;
+  const [category] = entry;
+  const hasCase = beforeAfterCases.some((item) => !item.featured && item.treatmentCategories.includes(category));
+  return hasCase ? category : undefined;
 }
 
 /**

@@ -16,29 +16,51 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as PageReveal, RevealGroup, revealItem } from "@/components/ui/Reveal";
 import { Reveal } from "@/components/animations/Reveal";
+import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
 import { CTASection } from "@/components/sections/CTASection";
 import { treatmentIcons } from "@/components/treatments/TreatmentIcons";
 import { getTreatment } from "@/data/treatments";
+import { EMERGENCY_ALIGNMENT, EMERGENCY_2_ALIGNMENT } from "@/data/photoAlignments";
+import { useDepthParallax } from "@/lib/hooks/useDepthParallax";
+import { galleryResultsPath } from "@/lib/treatmentLinks";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 
 /**
  * The emergency & aesthetic dentistry page: fast aesthetic repair of damaged
  * front teeth.
  *
- * ARUBA DRAFT: ported from the reference site's "1 hour emergency" page with
- * its before/after sliders, patient case, published price range, call /
- * WhatsApp buttons and every promise of same-day or immediate availability
- * removed -- the dentist is only in Aruba on specific published dates. A short
- * safety note (SafetyNote below) says so plainly.
+ * ARUBA DRAFT: ported from the reference site's emergency page, including its
+ * two before/after photo pairs (treated by Sam Abdin; the reference's third
+ * slider repeated the hero pair and was not carried over). Its published
+ * price range, call / WhatsApp buttons, online "Dental Check" invitation and
+ * every promise of same-day or immediate availability were removed -- the
+ * dentist is only in Aruba on specific published dates. A short safety note
+ * (SafetyNote below) says so plainly.
  */
 
 const SLUG = "emergency-aesthetic-dentistry";
+
+/**
+ * The same emergency-repair photography as the home page's EmergencyService
+ * section: the hero features the full-tooth-loss case, the "who this may
+ * help" section the single-gap case, so the page uses both pairs without
+ * repeating either.
+ */
+const heroCase = {
+  beforeImage: "/images/home/emergency-care-2-before.webp",
+  afterImage: "/images/home/emergency-care-2-after.webp",
+};
+const featuredCase = {
+  beforeImage: "/images/home/emergency-care-before.webp",
+  afterImage: "/images/home/emergency-care-after.webp",
+};
 
 function EmergencyHero() {
   const { t } = useTranslation();
   const item = getTreatment(SLUG);
   const Icon = treatmentIcons[item.icon];
+  const { ref: mediaRef, y: depthY } = useDepthParallax();
 
   return (
     <section className="relative overflow-hidden pb-12 pt-32 sm:pb-16 sm:pt-40">
@@ -46,7 +68,7 @@ function EmergencyHero() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,var(--accent-glow),transparent)] opacity-60 dark:opacity-40"
       />
-      <Container className="flex w-full min-w-0 flex-col gap-8">
+      <Container className="!max-w-[1560px] flex w-full min-w-0 flex-col gap-8">
         <Link
           href="/treatments"
           className="-mx-1 inline-flex w-fit items-center gap-1.5 rounded-sm px-1 text-xs font-medium text-fg-muted transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -55,26 +77,56 @@ function EmergencyHero() {
           {t.treatmentDetail.backToTreatments}
         </Link>
 
-        <div className="flex flex-col items-start gap-6">
-          <Reveal>
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-surface-border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-accent-deep dark:text-accent">
-              <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} aria-hidden="true" />
-              {t.emergencyTreatmentPage.heroEyebrow}
-            </span>
-          </Reveal>
-          <Reveal
-            as="h1"
-            delay={0.1}
-            className="max-w-3xl text-balance break-words font-display text-hero font-medium leading-[1.05] text-fg"
-          >
-            {item.name}
-          </Reveal>
-          <Reveal as="p" delay={0.2} className="max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
-            {item.description}
-          </Reveal>
-          <Reveal delay={0.3} className="w-full max-w-2xl">
-            <SafetyNote />
-          </Reveal>
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[0.82fr_1fr] lg:gap-16">
+          <div className="flex min-w-0 flex-col items-start gap-6">
+            <Reveal>
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-surface-border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-accent-deep dark:text-accent">
+                <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+                {t.emergencyTreatmentPage.heroEyebrow}
+              </span>
+            </Reveal>
+            <Reveal
+              as="h1"
+              delay={0.1}
+              className="max-w-3xl text-balance break-words font-display text-hero font-medium leading-[1.05] text-fg"
+            >
+              {item.name}
+            </Reveal>
+            <Reveal as="p" delay={0.2} className="max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+              {item.description}
+            </Reveal>
+            <Reveal delay={0.3} className="w-full max-w-2xl">
+              <SafetyNote />
+            </Reveal>
+          </div>
+
+          <motion.div ref={mediaRef} style={{ y: depthY }} className="relative mx-auto w-full max-w-md lg:max-w-[75%]">
+            {/*
+              4/3 on mobile, 3/2 from sm: (reference values): these photos
+              (~2.28-2.39/1 native, EMERGENCY_2_ALIGNMENT) are wider than
+              either container, so the crop only trims the sides.
+            */}
+            <Reveal scale={1.025} distance={0} duration={0.95}>
+              <BeforeAfterSlider
+                aspectClassName="aspect-[4/3] sm:aspect-[3/2]"
+                beforeImage={heroCase.beforeImage}
+                afterImage={heroCase.afterImage}
+                beforeAlt={t.emergencyService.beforeAlt}
+                afterAlt={t.emergencyService.afterAlt}
+                beforeLabel={t.smileGallery.before}
+                afterLabel={t.smileGallery.after}
+                ariaLabel={`${t.smileGallery.sliderLabel}: ${item.name}`}
+                imageSizes="(max-width: 1024px) 90vw, 40vw"
+                alignment={EMERGENCY_2_ALIGNMENT}
+                priority
+                className="border border-surface-border shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)]"
+              />
+            </Reveal>
+            {/* ARUBA DRAFT: new copy, needs practice review */}
+            <p className="mt-4 text-left text-xs leading-relaxed text-fg-muted">
+              {t.smileGallery.caseCaption} {t.smileGallery.treatedByNote}
+            </p>
+          </motion.div>
         </div>
       </Container>
     </section>
@@ -113,11 +165,11 @@ function WhoMayHelpSection() {
   const copy = t.emergencyTreatmentPage;
   return (
     <section className="py-12 sm:py-20 lg:py-28">
-      <Container>
-        <PageReveal className="flex max-w-3xl flex-col gap-6">
+      <Container className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <PageReveal className="flex flex-col gap-6">
           <SectionHeading align="left" eyebrow={copy.helpEyebrow} title={copy.helpTitle} />
           <p className="text-base leading-relaxed text-fg-muted">{copy.helpIntro}</p>
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="flex flex-col gap-3">
             {copy.helpItems.map((point) => (
               <li key={point} className="flex items-start gap-3 text-base leading-relaxed text-fg-muted">
                 <Check className="mt-1 h-4 w-4 shrink-0 text-accent" strokeWidth={2.5} aria-hidden="true" />
@@ -126,6 +178,33 @@ function WhoMayHelpSection() {
             ))}
           </ul>
           <p className="text-sm italic leading-relaxed text-fg-muted/80">{copy.helpClosing}</p>
+        </PageReveal>
+        {/*
+          Same 4/3 -> 3/2 (sm:+) ratios as the hero. This pair
+          (EMERGENCY_ALIGNMENT, ~1.22/1 and ~1.45/1 native) was verified on the
+          reference site: the extra crop lands in lip-skin margin, well clear
+          of the teeth and the missing-tooth gap this photo exists to show.
+        */}
+        <PageReveal delay={0.1} className="flex w-full flex-col gap-3 lg:max-w-[85%]">
+          <BeforeAfterSlider
+            aspectClassName="aspect-[4/3] sm:aspect-[3/2]"
+            beforeImage={featuredCase.beforeImage}
+            afterImage={featuredCase.afterImage}
+            beforeAlt={t.emergencyService.beforeAlt}
+            afterAlt={t.emergencyService.afterAlt}
+            beforeLabel={t.smileGallery.before}
+            afterLabel={t.smileGallery.after}
+            ariaLabel={`${t.smileGallery.sliderLabel}: ${t.emergencyService.title}`}
+            imageSizes="(max-width: 1024px) 90vw, 45vw"
+            alignment={EMERGENCY_ALIGNMENT}
+            className="border border-surface-border shadow-[0_20px_60px_-20px_rgba(0,0,0,0.2)]"
+          />
+          <Link
+            href={galleryResultsPath("emergency")}
+            className="-mx-1 inline-flex w-fit items-center gap-1.5 rounded-sm px-1 text-sm font-medium text-accent-deep underline decoration-accent/30 underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-accent"
+          >
+            {t.galleryLinks.resultsLink}
+          </Link>
         </PageReveal>
       </Container>
     </section>
