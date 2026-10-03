@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512">
+  <!-- App/favicon mark: the Dentacare tooth outline in champagne gold on espresso. -->
+  <rect width="64" height="64" rx="14" fill="#1c1914"/>
+  <path transform="translate(17 8) scale(0.68)" fill="none" stroke="#d1b67e" stroke-width="5.2" stroke-linejoin="round" stroke-linecap="round"
+        d="M10 2C3 3 0 11 2 20c2 8 5 14 6 24 1 9 3 22 7 24s4-10 5-18c1-5 2-8 2-8s1 3 2 8c1 8 1 20 5 18s6-15 7-24c1-10 4-16 6-24 2-9-1-17-8-18-5-1-8 2-12 3-4-1-7-4-12-3Z"/>
+</svg>

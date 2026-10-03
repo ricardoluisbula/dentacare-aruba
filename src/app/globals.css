@@ -1,0 +1,342 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
+
+  /* Fluid headline sizes — ramp smoothly from phone to the exact desktop
+     size the stepped scale used to jump to, instead of breaking abruptly. */
+  --text-hero: clamp(2.25rem, 1.6rem + 4.53vw, 4.5rem);
+  --text-section: clamp(1.7rem, 1.7rem + 2.71vw, 3rem);
+
+  /* Champagne gold — the Dentacare Aruba brand accent, anchored on the
+     original gold token #c6a664 (gold-500). Every step was contrast-checked:
+     gold-700 is the text/focus-ring shade on light surfaces (5.5:1 on ivory,
+     4.8:1 on gold-100); gold-500 carries ink-950 button text at 8.6:1. */
+  --color-gold-50: #fbf8f1;
+  --color-gold-100: #f5eedd;
+  --color-gold-200: #eadcbb;
+  --color-gold-300: #dcc796;
+  --color-gold-400: #d1b67e;
+  --color-gold-500: #c6a664;
+  --color-gold-600: #a88a4a;
+  --color-gold-700: #7f6436;
+  --color-gold-800: #665030;
+  --color-gold-900: #54432a;
+  --color-gold-950: #2e2416;
+
+  /* Espresso — warm near-black for the large dark promotional panels
+     (the shared CTASection). Pairs with champagne gold where the reference
+     site used forest/olive green. Ivory text measures 15:1+ on every step. */
+  --color-espresso-700: #2a251d;
+  --color-espresso-800: #221e18;
+  --color-espresso-900: #1c1914;
+
+  /* Ink — deep neutral for dark surfaces */
+  --color-ink-50: #f4f5f6;
+  --color-ink-100: #e4e6e8;
+  --color-ink-200: #c7cbd0;
+  --color-ink-300: #9fa5ad;
+  --color-ink-400: #6f7680;
+  --color-ink-500: #4e5560;
+  --color-ink-600: #383e48;
+  --color-ink-700: #262b33;
+  --color-ink-800: #181c22;
+  --color-ink-900: #101317;
+  --color-ink-950: #08090b;
+
+  /* Ivory — warm neutral for light surfaces */
+  --color-ivory-50: #fffdfa;
+  --color-ivory-100: #fbf8f2;
+  --color-ivory-200: #f5efe3;
+  --color-ivory-300: #ece2cd;
+  --color-ivory-400: #ddccab;
+
+  /*
+   * Shared motion token. Verified this generates a working `ease-premium`
+   * utility in this project's Tailwind v4 setup — unlike --radius-*,
+   * --shadow-* and --duration-*, which this setup silently fails to turn
+   * into utility classes (same quirk documented previously for bare
+   * `border-{customColor}` utilities). For radius/shadow/duration, keep
+   * using the plain Tailwind scale already proven throughout the codebase
+   * (rounded-3xl, rounded-[2rem], duration-300, duration-500, and the
+   * existing shadow-[...] arbitrary values) rather than new custom tokens.
+   */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.8s ease-out both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+}
+
+:root {
+  --bg: var(--color-ivory-50);
+  --bg-elevated: #ffffff;
+  --surface: rgba(255, 255, 255, 0.6);
+  --surface-strong: rgba(255, 255, 255, 0.82);
+  --surface-border: rgba(24, 28, 34, 0.08);
+  --fg: var(--color-ink-900);
+  --fg-muted: var(--color-ink-500);
+  --accent: var(--color-gold-500);
+  --accent-contrast: var(--color-ink-950);
+  --accent-glow: var(--color-gold-100);
+  --accent-soft: var(--color-gold-300);
+  --accent-deep: var(--color-gold-700);
+  /* Gradient headline text. Light theme uses the deeper golds so large text
+     keeps 3:1+ on ivory (gold-600 3.3:1, gold-700 5.5:1); champagne gold-500
+     alone would be 2.3:1. */
+  --accent-text-edge: var(--color-gold-600);
+  --accent-text-mid: var(--color-gold-700);
+  /* Keyboard focus indicator. gold-700 clears 3:1 against every light
+     surface it sits on: 5.5:1 on ivory and white, 4.8:1 on gold-100, 4.1:1
+     on gold-200. The dark espresso panels override it to ivory -- see
+     .focus-on-dark below. */
+  --ring: var(--color-gold-700);
+
+  /* Structural tokens not part of Tailwind's theme namespace — consumed via
+     arbitrary values (e.g. pt-[var(--header-height)]) or plain CSS. */
+  --header-height: 4.75rem; /* ~76px unscrolled nav pill, used for anchor offsets */
+  --header-height-scrolled: 4rem; /* ~64px compact scrolled nav pill */
+  --mobile-bar-height: 4rem; /* reserved for a future mobile bottom action bar */
+}
+
+.dark {
+  --bg: var(--color-ink-950);
+  --bg-elevated: var(--color-ink-900);
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --fg: var(--color-ivory-50);
+  --fg-muted: var(--color-ink-300);
+  --accent: var(--color-gold-400);
+  --accent-contrast: var(--color-ink-950);
+  --accent-glow: var(--color-gold-950);
+  --ring: var(--color-gold-300);
+  --accent-text-edge: var(--color-gold-300);
+  --accent-text-mid: var(--color-gold-400);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-border: var(--surface-border);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-deep: var(--accent-deep);
+  --color-ring: var(--ring);
+}
+
+* {
+  border-color: var(--surface-border);
+}
+
+html {
+  /* Lenis (see LenisProvider) owns smooth scrolling and anchor easing; leaving the native
+     CSS smooth-scroll on here as well double-smooths and fights Lenis's own animation. */
+  scroll-behavior: auto;
+  color-scheme: light;
+  /* Deliberately 0, not a hardcoded header height: Lenis's own scrollTo() reads and
+     subtracts this value automatically on top of the offset LenisProvider already computes
+     from the header's actual measured height, so a non-zero value here double-offsets every
+     Lenis-driven anchor scroll. Native (non-Lenis) scrollIntoView calls lose CSS-based header
+     clearance as a result, but the site currently has no in-page anchor targets they'd apply to. */
+  scroll-padding-top: 0;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+@layer base {
+  /* The same focus indicator for anything that does not draw its own ring
+     (`focus-visible:ring-*` utilities, which win over this base layer), so no
+     control falls back to the browser's default outline. */
+  :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* On the dark espresso panels the gold-700 ring would vanish; ivory
+   measures 15:1+ there. */
+.focus-on-dark {
+  --ring: var(--color-ivory-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Belt-and-suspenders alongside MotionProvider's <MotionConfig reducedMotion="user">:
+     guarantees scroll-reveal content is fully visible even if JS hasn't run yet. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--color-ink-950);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-300);
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+}
+
+@layer utilities {
+  .glass {
+    background: var(--surface);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--surface-border);
+  }
+
+  .glass-strong {
+    background: var(--surface-strong);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--surface-border);
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(100deg, var(--accent-text-edge), var(--accent-text-mid) 45%, var(--accent-text-edge));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .shimmer-bg {
+    background: linear-gradient(
+      100deg,
+      transparent 40%,
+      color-mix(in srgb, var(--accent-soft) 50%, transparent) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+  }
+
+  .container-lux {
+    width: 100%;
+    max-width: 88rem;
+    margin-inline: auto;
+    /* max(): the usual gutter, or more on a landscape notched iPhone
+       (viewport-fit=cover, see the [locale] layout). */
+    padding-inline: max(1.25rem, env(safe-area-inset-left)) max(1.25rem, env(safe-area-inset-right));
+  }
+
+  @media (min-width: 640px) {
+    .container-lux {
+      padding-inline: max(2rem, env(safe-area-inset-left)) max(2rem, env(safe-area-inset-right));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-lux {
+      padding-inline: max(3rem, env(safe-area-inset-left)) max(3rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* While the mobile menu is open (Navbar sets data-menu-open on <html>),
+     the floating back-to-top button steps aside: they are
+     fixed to the bottom-right corner, which is where the menu ends and the
+     language choice sits. */
+  html[data-menu-open] [data-floating-action] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
