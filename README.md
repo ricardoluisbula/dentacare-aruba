@@ -34,7 +34,7 @@ champagne gold (`#C6A664`) on ivory with dark typography.
   (password from environment variables, dates in Upstash Redis or a local file).
 - **Removed Osdorp-only features**: MondCheck, Dutch legal pages (terms,
   complaints, disclaimer).
-- **English only** for now; the i18n routing is kept so languages can be added.
+- **Languages**: English (default), Dutch (`/nl`), Spanish (`/es`) and Aruba Papiamento (`/pap`). UI text in `src/lib/i18n/dictionaries/`, page content in `src/content/<locale>/`; translations are machine-assisted and listed for review in `docs/translations/`.
 - **Draft guards**: `SITE_IS_DRAFT` in `src/lib/site.ts` drives `noindex`
   metadata, an `X-Robots-Tag` header, a disallow-all `robots.txt` and an empty
   sitemap. `src/lib/draft.test.ts` and `e2e/draft.spec.ts` fail if Amsterdam

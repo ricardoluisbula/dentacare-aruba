@@ -20,7 +20,7 @@ import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
 import { CTASection } from "@/components/sections/CTASection";
 import { treatmentIcons } from "@/components/treatments/TreatmentIcons";
-import { getTreatment } from "@/data/treatments";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { EMERGENCY_ALIGNMENT, EMERGENCY_2_ALIGNMENT } from "@/data/photoAlignments";
 import { useDepthParallax } from "@/lib/hooks/useDepthParallax";
 import { galleryResultsPath } from "@/lib/treatmentLinks";
@@ -58,6 +58,7 @@ const featuredCase = {
 
 function EmergencyHero() {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
   const item = getTreatment(SLUG);
   const Icon = treatmentIcons[item.icon];
   const { ref: mediaRef, y: depthY } = useDepthParallax();

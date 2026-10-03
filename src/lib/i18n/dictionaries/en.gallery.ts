@@ -105,3 +105,4 @@ const galleryCopy = {
 };
 
 export default galleryCopy;
+export type GalleryCopy = typeof galleryCopy;

@@ -10,8 +10,9 @@ import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/Button";
 import { CTASection } from "@/components/sections/CTASection";
 import { treatmentIcons } from "@/components/treatments/TreatmentIcons";
-import { getTreatment, type Treatment } from "@/data/treatments";
-import { treatmentPages, type TreatmentPageSection } from "@/data/treatmentPages";
+import type { Treatment } from "@/data/treatments";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
+import type { TreatmentPageContent, TreatmentPageSection } from "@/data/treatmentPages";
 import {
   RELATED_TREATMENT_SLUGS,
   galleryCategoryForTreatment,
@@ -34,11 +35,11 @@ import { useTranslation } from "@/lib/i18n/LanguageProvider";
  * pages whose treatment has cases in the Smile Gallery, and opens the gallery
  * on that category.
  */
-export function TreatmentDetailBody({ slug }: { slug: string }) {
+export function TreatmentDetailBody({ slug, content }: { slug: string; content: TreatmentPageContent }) {
   const { t } = useTranslation();
+  const { getTreatment } = useLocalizedContent();
 
   const item = getTreatment(slug);
-  const content = treatmentPages[slug];
   const copy = t.treatmentDetail;
   const Icon = treatmentIcons[item.icon];
   const related = RELATED_TREATMENT_SLUGS[slug as TreatmentSlug] ?? [];

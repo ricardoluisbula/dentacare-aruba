@@ -172,35 +172,63 @@ function utcDate(date: string): Date {
 // The date is built at UTC midnight, so it is formatted in UTC: formatting in
 // any other zone could show the previous day. Parts are assembled by hand so
 // the output ("Mon 12 Oct 2026") does not depend on a runtime's punctuation.
-const PARTS = new Intl.DateTimeFormat("en-GB", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
+// The calendar date itself is always the Aruba date that was entered; only
+// the day and month NAMES change with the language.
 
-function parts(date: Date) {
-  const p = Object.fromEntries(PARTS.formatToParts(date).map((x) => [x.type, x.value]));
-  return { weekday: p.weekday, day: p.day, month: p.month, year: p.year };
+/** Display languages for dates (mirrors the site's locales; kept local so this module stays free of app imports). */
+export type DateLocale = "en" | "nl" | "es" | "pap";
+
+const INTL_LOCALE: Record<Exclude<DateLocale, "pap">, string> = { en: "en-GB", nl: "nl-NL", es: "es" };
+
+const intlParts = Object.fromEntries(
+  Object.entries(INTL_LOCALE).map(([key, tag]) => [
+    key,
+    new Intl.DateTimeFormat(tag, { weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }),
+  ])
+) as Record<Exclude<DateLocale, "pap">, Intl.DateTimeFormat>;
+
+/**
+ * Aruba Papiamento day and month names. Most runtimes ship no Papiamento
+ * date data, so they are spelled out here, in full (no unofficial
+ * abbreviations). REVIEW: confirm these Aruba spellings with a fluent Aruba
+ * speaker (docs/translations/REVIEW-pap.md).
+ */
+export const PAP_WEEKDAYS = ["djadomingo", "djaluna", "djamars", "djarason", "djaweps", "djabierna", "djasabra"];
+export const PAP_MONTHS = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "october", "november", "december"];
+
+function parts(date: Date, locale: DateLocale) {
+  if (locale === "pap") {
+    return {
+      weekday: PAP_WEEKDAYS[date.getUTCDay()],
+      day: String(date.getUTCDate()),
+      month: PAP_MONTHS[date.getUTCMonth()],
+      year: String(date.getUTCFullYear()),
+    };
+  }
+  const p = Object.fromEntries(intlParts[locale].formatToParts(date).map((x) => [x.type, x.value]));
+  // Some runtimes add an abbreviation dot ("okt.", "oct."); the format is the same without it.
+  const clean = (s: string) => s.replace(/\.$/, "");
+  return { weekday: clean(p.weekday), day: p.day, month: clean(p.month), year: p.year };
 }
 
-const WEEKDAY_DAY_MONTH_YEAR = { format: (d: Date) => { const p = parts(d); return `${p.weekday} ${p.day} ${p.month} ${p.year}`; } };
-const WEEKDAY_DAY_MONTH = { format: (d: Date) => { const p = parts(d); return `${p.weekday} ${p.day} ${p.month}`; } };
-const WEEKDAY_DAY = { format: (d: Date) => { const p = parts(d); return `${p.weekday} ${p.day}`; } };
+const full = (d: Date, l: DateLocale) => { const p = parts(d, l); return `${p.weekday} ${p.day} ${p.month} ${p.year}`; };
+const noYear = (d: Date, l: DateLocale) => { const p = parts(d, l); return `${p.weekday} ${p.day} ${p.month}`; };
+const dayOnly = (d: Date, l: DateLocale) => { const p = parts(d, l); return `${p.weekday} ${p.day}`; };
 
 /**
  * "Mon 12 Oct 2026", "Mon 12 – Fri 16 Oct 2026",
- * "Mon 28 Sept – Fri 2 Oct 2026", "Mon 28 Dec 2026 – Fri 1 Jan 2027".
+ * "Mon 28 Sept – Fri 2 Oct 2026", "Mon 28 Dec 2026 – Fri 1 Jan 2027";
+ * Dutch "ma 12 – vr 16 okt 2026", Spanish "lun 12 – vie 16 oct 2026",
+ * Papiamento "djaluna 12 – djabierna 16 october 2026".
  */
-export function formatDateRange(startDate: string, endDate: string): string {
+export function formatDateRange(startDate: string, endDate: string, locale: DateLocale = "en"): string {
   const start = utcDate(startDate);
   const end = utcDate(endDate);
-  if (startDate === endDate) return WEEKDAY_DAY_MONTH_YEAR.format(start);
+  if (startDate === endDate) return full(start, locale);
   const sameYear = start.getUTCFullYear() === end.getUTCFullYear();
   const sameMonth = sameYear && start.getUTCMonth() === end.getUTCMonth();
-  const first = sameMonth ? WEEKDAY_DAY.format(start) : sameYear ? WEEKDAY_DAY_MONTH.format(start) : WEEKDAY_DAY_MONTH_YEAR.format(start);
-  return `${first} – ${WEEKDAY_DAY_MONTH_YEAR.format(end)}`;
+  const first = sameMonth ? dayOnly(start, locale) : sameYear ? noYear(start, locale) : full(start, locale);
+  return `${first} – ${full(end, locale)}`;
 }
 
 /** "09:00 – 17:00", or null when no hours were entered. */

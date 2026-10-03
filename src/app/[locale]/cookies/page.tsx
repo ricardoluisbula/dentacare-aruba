@@ -4,7 +4,7 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 import { resolveLocale, type LocaleParams } from "@/lib/i18n/localeParams";
 import { buildPageMetadata } from "@/lib/seo";
 import { PolicyBody } from "@/components/legal/PolicyBody";
-import { cookiePolicy } from "@/data/policies";
+import { getPolicy } from "@/content/pages";
 
 const PATH = "/cookies";
 
@@ -16,5 +16,5 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 /** Policy text: src/data/policies.ts (open points marked REVIEW there). */
 export default async function CookiesPage({ params }: LocaleParams) {
   const locale = await resolveLocale(params);
-  return <PolicyBody title={getDictionary(locale).pages.cookies.title} policy={cookiePolicy} />;
+  return <PolicyBody title={getDictionary(locale).pages.cookies.title} policy={getPolicy("cookies", locale)} />;
 }

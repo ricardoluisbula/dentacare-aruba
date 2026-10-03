@@ -4,6 +4,10 @@ import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import en from "@/lib/i18n/dictionaries/en";
 import { buildPageMetadata } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import { locales } from "@/lib/i18n/routing";
+import { sharedContent } from "@/content/shared";
+import { pageContent } from "@/content/pages";
 
 /**
  * The Aruba site is a draft: it must stay out of search engines, show only
@@ -60,9 +64,13 @@ describe("Aruba draft", () => {
     }
   });
 
-  it("has no Amsterdam practice details or contact links outside the confirmed exceptions", () => {
-    let text = JSON.stringify({ en, siteConfig });
-    for (const allowed of ALLOWED) text = text.split(allowed).join("");
+  it.each(locales)("has no Amsterdam practice details or contact links outside the confirmed exceptions (%s)", (locale) => {
+    const t = getDictionary(locale);
+    // The same confirmed exceptions, in this language: the dentist's own
+    // verified experience in Amsterdam is allowed in his biography only.
+    const allowed = [...ALLOWED, ...t.teamPage.bio, t.teamPage.experienceValue];
+    let text = JSON.stringify({ t, siteConfig, shared: sharedContent(locale), pages: pageContent(locale) });
+    for (const ok of allowed) text = text.split(JSON.stringify(ok).slice(1, -1)).join("");
     for (const pattern of FORBIDDEN) {
       expect(text, String(pattern)).not.toMatch(pattern);
     }

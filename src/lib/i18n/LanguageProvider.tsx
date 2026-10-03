@@ -2,10 +2,7 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import en, { type Dictionary } from "./dictionaries/en";
-
-
-
+import type { Dictionary } from "./dictionaries/en";
 import {
   DEFAULT_LOCALE,
   localizePath,
@@ -15,8 +12,6 @@ import {
 } from "./routing";
 
 export { locales, DEFAULT_LOCALE, type Locale };
-
-const dictionaries: Record<Locale, Dictionary> = { en };
 
 type LanguageContextValue = {
   locale: Locale;
@@ -52,10 +47,16 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(undefine
  */
 export function LanguageProvider({
   locale,
+  dictionary,
   notFound = false,
   children,
 }: {
   locale: Locale;
+  /**
+   * The active language's dictionary, supplied by the server (SiteBody), so
+   * the browser only ever downloads the language being read.
+   */
+  dictionary: Dictionary;
   notFound?: boolean;
   children: ReactNode;
 }) {
@@ -65,16 +66,16 @@ export function LanguageProvider({
   const value = useMemo<LanguageContextValue>(() => {
     const setLocale = (next: Locale) => {
       // No cookie: the URL is the only language signal (see
-      // src/middleware.ts). Stay on the page the visitor is reading -- "/en/treatments" becomes
-      // "/it/treatments", not "/it". `stripLocale` reduces the current URL
+      // src/middleware.ts). Stay on the page the visitor is reading -- "/nl/treatments" becomes
+      // "/es/treatments", not "/es". `stripLocale` reduces the current URL
       // to its locale-independent route first, so this works from any
       // language to any other.
       const { path } = stripLocale(pathname ?? "/");
       router.push(localizePath(path, next));
     };
 
-    return { locale, setLocale, t: dictionaries[locale], mounted: true, notFound };
-  }, [locale, notFound, pathname, router]);
+    return { locale, setLocale, t: dictionary, mounted: true, notFound };
+  }, [locale, dictionary, notFound, pathname, router]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

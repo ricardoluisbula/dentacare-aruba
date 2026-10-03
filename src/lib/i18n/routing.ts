@@ -10,14 +10,14 @@
  * (`/es/about`). Each of those routes is a real server-rendered page with its
  * own metadata, so the correct language is in the initial HTML.
  *
- * ARUBA DRAFT: English only for now. Which languages the Aruba site should
- * offer (Papiamento, Dutch, Spanish, ...) has not been decided -- see
- * docs/ARUBA-LAUNCH-CHECKLIST.md. Adding one means a new entry in `locales`,
- * HTML_LANG, OG_LOCALE and LOCALE_LABEL, a dictionary, and a pageMeta column.
- * The language switcher hides itself while only one language exists.
+ * Languages: English (default, unprefixed URLs), Dutch (/nl), Spanish (/es)
+ * and Aruba Papiamento (/pap). Adding one means a new entry in `locales`,
+ * HTML_LANG, OG_LOCALE and LOCALE_LABEL, a dictionary
+ * (src/lib/i18n/dictionaries/) and content (src/content/<locale>/).
  */
 
-export const locales = ["en"] as const;
+/** In the order the language selector lists them. */
+export const locales = ["en", "nl", "es", "pap"] as const;
 
 export type Locale = (typeof locales)[number];
 
@@ -43,19 +43,31 @@ export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
 
-/** The value for `<html lang>`. */
+/**
+ * The value for `<html lang>` and `hreflang`. "pap" is the ISO 639 code for
+ * Papiamento; the site uses Aruba's Papiamento spelling.
+ */
 export const HTML_LANG: Record<Locale, string> = {
   en: "en",
+  nl: "nl",
+  es: "es",
+  pap: "pap",
 };
 
 /** The value for Open Graph's `og:locale`, which uses underscores. */
 export const OG_LOCALE: Record<Locale, string> = {
   en: "en_US",
+  nl: "nl_AW",
+  es: "es_AW",
+  pap: "pap_AW",
 };
 
 /** Language names, each written in its own language, for the switcher. */
 export const LOCALE_LABEL: Record<Locale, string> = {
   en: "English",
+  nl: "Nederlands",
+  es: "Español",
+  pap: "Papiamento",
 };
 
 /**

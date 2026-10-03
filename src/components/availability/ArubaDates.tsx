@@ -37,7 +37,7 @@ export function ArubaDates({
   limit?: number;
   showMoreLink?: boolean;
 }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [current, setCurrent] = useState(entries);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export function ArubaDates({
               >
                 <span className="inline-flex items-center gap-3 font-medium text-fg">
                   <CalendarDays className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.75} aria-hidden="true" />
-                  <time dateTime={isoStart(entry)}>{formatDateRange(entry.startDate, entry.endDate)}</time>
+                  <time dateTime={isoStart(entry)}>{formatDateRange(entry.startDate, entry.endDate, locale)}</time>
                 </span>
                 <span className="inline-flex items-center gap-3 pl-8 text-sm text-fg-muted sm:pl-0">
                   <Clock className="h-4 w-4 shrink-0 text-accent" strokeWidth={1.75} aria-hidden="true" />

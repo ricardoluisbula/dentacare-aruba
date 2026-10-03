@@ -152,6 +152,20 @@ test("the public pages show the confirmed dates in Aruba time", async ({ page, b
   await scrollThrough(page);
   await screenshot(page, "desktop-contact-full", true);
 
+  // The same Aruba dates, with day and month names in each language; times
+  // stay in Aruba time.
+  for (const locale of ["nl", "es", "pap"] as const) {
+    await page.goto(`/${locale}/contact`);
+    const list = page.locator("#aruba-dates ul").first();
+    await expect(list.getByText(formatDateRange(A.start, A.end, locale))).toBeVisible();
+    await expect(list.getByText("09:00 – 17:00")).toBeVisible();
+    await expect(list.getByText(formatDateRange(B, B, locale))).toBeVisible();
+    await expect(page.locator("#aruba-dates").getByText(/UTC−4/)).toBeVisible();
+    await page.locator("#aruba-dates").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+    await page.locator("#aruba-dates").screenshot({ path: `playwright-screenshots/i18n-${locale}-contact-dates.png` });
+  }
+
   await page.goto("/");
   const section = page.locator("#aruba-dates");
   await section.scrollIntoViewIfNeeded();

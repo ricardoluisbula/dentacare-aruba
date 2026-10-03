@@ -1,4 +1,4 @@
-import { preventiveCare } from "./treatmentPages/preventiveCare";
+import type { TreatmentPageContent } from "./treatmentPages/types";
 
 type FaqItem = { question: string; answer: string };
 
@@ -8,7 +8,7 @@ type FaqItem = { question: string; answer: string };
  * concrete home care, and the questions patients ask. Its first FAQ ("how
  * often should I come?") is left out: the prevention page already answers it.
  */
-export function preventionExtras() {
+export function preventionExtras(preventiveCare: TreatmentPageContent) {
   return {
     limitations: preventiveCare.limitations,
     aftercare: preventiveCare.aftercare,
@@ -17,8 +17,8 @@ export function preventionExtras() {
 }
 
 /** The single FAQ list the prevention page shows: its own questions, then the extras. */
-export function preventionFaq(pageFaq: readonly FaqItem[]): FaqItem[] {
-  return [...pageFaq, ...preventionExtras().faq];
+export function preventionFaq(pageFaq: readonly FaqItem[], preventiveCare: TreatmentPageContent): FaqItem[] {
+  return [...pageFaq, ...preventionExtras(preventiveCare).faq];
 }
 
 /** Treatments a prevention visitor is most likely to need next, linked from the page. */

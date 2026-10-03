@@ -12,7 +12,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { CATEGORY_ICON } from "@/components/gallery/categoryMeta";
-import { beforeAfterCases } from "@/data/beforeAfterCases";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +38,7 @@ const GalleryModal = dynamic(() => import("@/components/gallery/GalleryModal").t
  */
 function FeaturedTransformation() {
   const { t } = useTranslation();
+  const { cases: beforeAfterCases } = useLocalizedContent();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const featuredCase = beforeAfterCases.find((item) => item.featured) ?? beforeAfterCases[0];
   const CategoryIcon = CATEGORY_ICON[featuredCase.treatmentCategories[0]];

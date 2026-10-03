@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { MotionProvider } from "@/components/layout/MotionProvider";
 import { LenisProvider } from "@/components/layout/LenisProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollToTopButton } from "@/components/layout/ScrollToTopButton";
@@ -30,7 +31,7 @@ export function SiteBody({
     <body className="flex min-h-dvh flex-col font-sans antialiased">
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
         <MotionProvider>
-          <LanguageProvider locale={locale} notFound={notFound}>
+          <LanguageProvider locale={locale} dictionary={getDictionary(locale)} notFound={notFound}>
             <SkipLink />
             <LenisProvider>
               <Navbar />

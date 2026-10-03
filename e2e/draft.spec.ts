@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { DRAFT_ROUTES, FORBIDDEN_TEXT, isForbiddenHref, POLICY_ROUTES, PRIVACY_EMAIL, screenshot, scrollThrough, stripAllowed, WHATSAPP_URL } from "./helpers";
+import { ALL_LOCALIZED_ROUTES, baseRoute, FORBIDDEN_TEXT, isForbiddenHref, POLICY_ROUTES, PRIVACY_EMAIL, screenshot, scrollThrough, stripAllowed, WHATSAPP_URL } from "./helpers";
 
 /**
  * Guards the Aruba draft's promises: it stays out of search engines, it shows
@@ -7,7 +7,7 @@ import { DRAFT_ROUTES, FORBIDDEN_TEXT, isForbiddenHref, POLICY_ROUTES, PRIVACY_E
  * WhatsApp (messages), Instagram and map links -- never a tel: or mailto:.
  */
 
-for (const route of DRAFT_ROUTES) {
+for (const { path: route } of ALL_LOCALIZED_ROUTES) {
   test(`draft guard: ${route}`, async ({ page, request }) => {
     const response = await page.goto(route);
     expect(response?.status(), "status").toBe(200);
@@ -109,7 +109,7 @@ test("Composite Veneers keeps its existing URL and shows the new name", async ({
 /** Pages that exist but are still being prepared (unlinked). */
 const UNFINISHED_ROUTES = ["/about", "/reviews", "/new-patients", "/pricing-info"];
 
-for (const route of DRAFT_ROUTES) {
+for (const { path: route } of ALL_LOCALIZED_ROUTES) {
   test(`launch prep: ${route} shows no draft labels and no links to unfinished pages`, async ({ page }) => {
     await page.goto(route);
     await expect(page).not.toHaveTitle(/draft/i);
@@ -119,7 +119,8 @@ for (const route of DRAFT_ROUTES) {
 
     const hrefs = await page.locator("a[href]").evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
     for (const unfinished of UNFINISHED_ROUTES) {
-      expect(hrefs.filter((h) => h === unfinished || h.startsWith(`${unfinished}#`)), `link to ${unfinished}`).toEqual([]);
+      const internal = hrefs.filter((h) => h.startsWith("/")).map((h) => baseRoute(h.split("#")[0]));
+      expect(internal.filter((h) => h === unfinished), `link to ${unfinished}`).toEqual([]);
     }
   });
 }
@@ -133,12 +134,13 @@ test("the footer still links Privacy and Cookies", async ({ page }) => {
 });
 
 test("the privacy email appears only on the policy pages, never as a booking contact", async ({ page }) => {
-  for (const route of DRAFT_ROUTES) {
+  test.setTimeout(240_000);
+  for (const { locale, path: route } of ALL_LOCALIZED_ROUTES) {
     await page.goto(route);
     const text = await page.locator("body").innerText();
-    if (POLICY_ROUTES.includes(route)) {
+    if (POLICY_ROUTES.includes(baseRoute(route))) {
       await expect(page.getByRole("link", { name: PRIVACY_EMAIL }).first()).toHaveAttribute("href", `mailto:${PRIVACY_EMAIL}`);
-      expect(text).toMatch(/privacy questions only|For questions, email/);
+      if (locale === "en") expect(text).toMatch(/privacy questions only|For questions, email/);
     } else {
       expect(text, route).not.toContain(PRIVACY_EMAIL);
     }

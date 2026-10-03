@@ -2,14 +2,14 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname } from "next/navigation";
-import { Check, Globe } from "lucide-react";
+import { Check, ChevronDown, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LocaleLink } from "@/components/ui/LocaleLink";
 import { useTranslation, locales, type Locale } from "@/lib/i18n/LanguageProvider";
 import { HTML_LANG, LOCALE_LABEL, LOCALIZED_ROUTE_LOCALES, stripLocale } from "@/lib/i18n/routing";
 import { trackEvent } from "@/lib/analytics";
 
-const CODE: Record<Locale, string> = { en: "EN" };
+const CODE: Record<Locale, string> = { en: "EN", nl: "NL", es: "ES", pap: "PAP" };
 
 type LanguageOption = {
   locale: Locale;
@@ -157,14 +157,15 @@ function LanguageDropdownMenu({ className = "" }: { className?: string }) {
         onKeyDown={handleTriggerKeyDown}
         aria-expanded={open}
         aria-controls={menuId}
-        // Says what the control does and what is chosen now:
-        // "Selecteer de websitetaal: Nederlands".
+        // Says what the control does and what is chosen now, e.g.
+        // "Select website language: English".
         aria-label={`${t.header.languageLabel}: ${current.label}`}
         data-testid="language-trigger"
-        className="flex h-11 min-w-11 shrink-0 items-center justify-center gap-1.5 rounded-full border border-surface-border px-3.5 text-xs font-semibold uppercase tracking-wide text-fg transition-colors hover:border-accent/50 hover:text-accent-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg dark:hover:text-accent"
+        className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-accent/45 bg-gold-50/70 px-4 text-sm font-medium text-accent-deep transition-colors hover:border-accent hover:bg-gold-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg dark:bg-gold-950/40 dark:text-accent dark:hover:bg-gold-950/70"
       >
-        <Globe className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-        <span aria-hidden="true">{current.code}</span>
+        <Globe className="h-4 w-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+        <span lang={HTML_LANG[current.locale]}>{current.label}</span>
+        <ChevronDown className={cn("h-3.5 w-3.5 shrink-0 transition-transform duration-200", open && "rotate-180")} strokeWidth={2} aria-hidden="true" />
       </button>
 
       {open && (
@@ -174,7 +175,7 @@ function LanguageDropdownMenu({ className = "" }: { className?: string }) {
           data-lenis-prevent
           data-testid="language-menu"
           className={cn(
-            "absolute z-50 min-w-[11rem] overflow-hidden rounded-2xl border border-surface-border bg-bg-elevated py-1.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.35)]",
+            "absolute z-50 min-w-[12rem] overflow-hidden rounded-2xl border border-accent/30 bg-bg-elevated py-1.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.35)]",
             placement.up ? "bottom-[calc(100%+0.5rem)]" : "top-[calc(100%+0.5rem)]",
             placement.alignLeft ? "left-0" : "right-0"
           )}
@@ -201,7 +202,7 @@ function LanguageDropdownMenu({ className = "" }: { className?: string }) {
                 )}
               >
                 <span>
-                  {option.label} <span className="text-xs opacity-70">— {option.code}</span>
+                  {option.label}
                   {option.fallback && <span className="ml-1 text-xs opacity-70">({t.header.languageFallback})</span>}
                 </span>
                 {option.current && <Check className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />}
@@ -251,13 +252,7 @@ function LanguageListMenu({ className = "" }: { className?: string }) {
                 <span className="block">{option.label}</span>
                 {option.fallback && <span className="block text-[11px] font-normal text-fg-muted">{t.header.languageFallback}</span>}
               </span>
-              {option.current ? (
-                <Check className="h-4 w-4 shrink-0" strokeWidth={2.25} aria-hidden="true" />
-              ) : (
-                <span className="shrink-0 text-xs font-semibold text-fg-muted" aria-hidden="true">
-                  {option.code}
-                </span>
-              )}
+              {option.current && <Check className="h-4 w-4 shrink-0" strokeWidth={2.25} aria-hidden="true" />}
             </LocaleLink>
           </li>
         ))}
@@ -267,10 +262,8 @@ function LanguageListMenu({ className = "" }: { className?: string }) {
 }
 
 /**
- * A language switcher is only useful with more than one language. The Aruba
- * draft ships English only (see src/lib/i18n/routing.ts), so both switchers
- * render nothing until a second locale is added -- the components themselves
- * are kept intact for that moment.
+ * A language switcher is only useful with more than one language: both
+ * switchers render nothing if the site is ever reduced to one locale.
  */
 const HAS_LANGUAGE_CHOICE = locales.length > 1;
 

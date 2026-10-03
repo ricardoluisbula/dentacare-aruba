@@ -10,7 +10,7 @@ import { StaggerGroup } from "@/components/animations/StaggerGroup";
 import { staggerItemVariants } from "@/components/animations/StaggerItem";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
-import { beforeAfterCases } from "@/data/beforeAfterCases";
+import { useLocalizedContent } from "@/content/useLocalizedContent";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +45,7 @@ const CARD_FRAMING: Record<string, { wrapperStyle: CSSProperties; aspectRatio: s
 /** Home page teaser for the Smile Gallery, ported from the reference site (English only, green section background mapped to ivory). */
 export function SmileGalleryPreview() {
   const { t } = useTranslation();
+  const { cases: beforeAfterCases } = useLocalizedContent();
   const featured = beforeAfterCases.slice(0, 4);
 
   return (
